@@ -3,13 +3,13 @@ package takeAway;
 import com.cucumber.listener.Reporter;
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
-import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.runner.RunWith;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.logging.Logger;
 
 @RunWith(Cucumber.class)
 
@@ -22,7 +22,7 @@ import java.util.Calendar;
 
 public class TestRunner {
 
-    private static Logger logger = Logger.getLogger(TestRunner.class);
+    private static Logger logger = Logger.getLogger(TestRunner.class.getName());
 
     @AfterClass
     public static void writeExtentReport() throws IOException {

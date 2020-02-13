@@ -5,7 +5,6 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 
 import cucumber.api.java.en.When;
-import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
@@ -13,10 +12,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class OrderMealSteps extends BasePage {
 
-    private static Logger logger = Logger.getLogger(OrderMealSteps.class);
+    private static Logger logger = Logger.getLogger(OrderMealSteps.class.getName());
     private String menuPrice;
     private String mealName;
     private String mealPrice;
@@ -38,8 +38,6 @@ public class OrderMealSteps extends BasePage {
             Assert.assertEquals(landingPageTitle, getConfigPropertyValue(propertyFile, "landing_page_title"));
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
-        } catch (AssertionError error) {
-            logger.error(error.getMessage());
         }
     }
 
@@ -50,8 +48,6 @@ public class OrderMealSteps extends BasePage {
             Assert.assertEquals(message, getConfigPropertyValue(propertyFile, "landing_page_messsag"));
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
-        } catch (AssertionError error) {
-            logger.error(error.getMessage());
         }
     }
 
@@ -64,8 +60,6 @@ public class OrderMealSteps extends BasePage {
             addressField.sendKeys(address);
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
-        } catch (AssertionError error) {
-            logger.error(error.getMessage());
         }
     }
 
@@ -102,8 +96,6 @@ public class OrderMealSteps extends BasePage {
             Assert.assertEquals(1, size);
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
-        } catch (AssertionError error) {
-            logger.error(error.getMessage());
         }
     }
 
@@ -114,8 +106,6 @@ public class OrderMealSteps extends BasePage {
             Assert.assertEquals(pageTitle, getConfigPropertyValue(propertyFile, "order_address_page_title"));
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
-        } catch (AssertionError error) {
-            logger.error(error.getMessage());
         }
     }
 
@@ -128,8 +118,6 @@ public class OrderMealSteps extends BasePage {
             Assert.assertTrue(numberOfRestaurants > 0);
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
-        } catch (AssertionError error) {
-            logger.error(error.getMessage());
         }
     }
 

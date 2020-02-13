@@ -1,6 +1,5 @@
 package takeAway;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -14,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 
 public class BasePage {
@@ -21,7 +21,7 @@ public class BasePage {
     protected static WebDriver driver;
     protected JavascriptExecutor jExecutor;
     protected WebDriverWait driverWait;
-    private static Logger logger = Logger.getLogger(BasePage.class);
+    private static Logger logger = Logger.getLogger(BasePage.class.getName());
     protected String propertyFile = "./src/test/resources/takeaway.properties";
 
 
@@ -30,7 +30,6 @@ public class BasePage {
         String linuxDriverLocation = "./src/test/resources//drivers/linux/";
         String windowsDriverLocation = "./src/test/resources/drivers/windows/";
         String browserName = getConfigPropertyValue(propertyFile, "browser");
-        BasicConfigurator.configure();
 
         switch (browserName) {
             case "chrome":
@@ -61,9 +60,9 @@ public class BasePage {
                     jExecutor = (JavascriptExecutor) driver;
                     driver.manage().window().maximize();
                     driverWait = new WebDriverWait(driver, 5);
-                } catch (Exception e) {
+                } catch (Exception ex) {
                     logger.info("The stack trace here happens when I try to maximize the screen");
-                    logger.info(e.getStackTrace());
+                    logger.info(ex.getMessage());
                 }
                 break;
 
@@ -96,7 +95,7 @@ public class BasePage {
                     driverWait = new WebDriverWait(driver, 5);
                 } catch (Exception ex) {
                     logger.info("The stack trace here happens when I try to maximize the screen");
-                    logger.info(ex.getStackTrace());
+                    logger.info(ex.getMessage());
                 }
         }
 
@@ -117,8 +116,8 @@ public class BasePage {
             prop.load(fileIS);
 
             Value = prop.getProperty(propertyName);
-        } catch (IOException e) {
-            logger.info(e.getStackTrace());
+        } catch (IOException ex) {
+            logger.info(ex.getMessage());
         }
 
         return Value;
@@ -184,7 +183,7 @@ public class BasePage {
             logger.info("##############################################");
             Thread.sleep(timeInMilliSeconds);
         } catch (Exception e) {
-            logger.info(e.getStackTrace());
+            logger.info(e.getMessage());
         }
     }
     /**
