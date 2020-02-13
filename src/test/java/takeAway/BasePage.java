@@ -1,10 +1,7 @@
 package takeAway;
-
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -18,26 +15,28 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-public class DriverSetUp {
 
+public class BasePage {
 
-    protected  static WebDriver driver;
-    protected  JavascriptExecutor jExecutor;
+    protected static WebDriver driver;
+    protected JavascriptExecutor jExecutor;
     protected WebDriverWait driverWait;
-    private static Logger logger = Logger.getLogger(DriverSetUp.class);
-    protected  String propertyFile = "./customer.properties";
+    private static Logger logger = Logger.getLogger(BasePage.class);
+    protected String propertyFile = "./src/test/resources/takeaway.properties";
 
 
     protected WebDriver setupWebDriver() {
-        String macDriverLocation = "./drivers/mac/";
-        String linuxDriverLocation = "./drivers/linux/";
-        String windowsDriverLocation = ".drivers/windows/";
-
-        String browserName = "chrome";
+        String macDriverLocation = "./src/test/resources//drivers/mac/";
+        String linuxDriverLocation = "./src/test/resources//drivers/linux/";
+        String windowsDriverLocation = "./src/test/resources/drivers/windows/";
+        String browserName = getConfigPropertyValue(propertyFile, "browser");
+        BasicConfigurator.configure();
 
         switch (browserName) {
-
-            case "chrome" :
+            case "chrome":
+                /**
+                 * Driver setup for google chrome web browser
+                 */
                 String chromeDriverPath = null;
 
                 if (this.getOsName().equalsIgnoreCase("Windows")) {
@@ -64,12 +63,15 @@ public class DriverSetUp {
                     driverWait = new WebDriverWait(driver, 5);
                 } catch (Exception e) {
                     logger.info("The stack trace here happens when I try to maximize the screen");
-                    logger.info(e.getStackTrace()) ;
+                    logger.info(e.getStackTrace());
                 }
                 break;
 
-            case "firefox" :
+            case "firefox":
 
+                /**
+                 * Driver setup for firefox web browser
+                 */
                 String firefoxDriverPath = null;
                 logger.info("Firefox ?: " + browserName);
                 if (this.getOsName().equalsIgnoreCase("Windows")) {
@@ -88,12 +90,13 @@ public class DriverSetUp {
                 driver = new FirefoxDriver();
 
                 try {
+
                     jExecutor = (JavascriptExecutor) driver;
                     driver.manage().window().maximize();
                     driverWait = new WebDriverWait(driver, 5);
                 } catch (Exception ex) {
                     logger.info("The stack trace here happens when I try to maximize the screen");
-                    logger.info(ex.getStackTrace()) ;
+                    logger.info(ex.getStackTrace());
                 }
         }
 
@@ -103,6 +106,9 @@ public class DriverSetUp {
     }
 
 
+    /**
+     * Read data from properties file
+     */
     public String getConfigPropertyValue(String propertyFileName, String propertyName) {
         String Value = null;
         try {
@@ -118,7 +124,10 @@ public class DriverSetUp {
         return Value;
     }
 
-    public static String toAbsolutePath(String relativePath) {
+    /**
+     * Convert path to absolute location
+     */
+    private static String toAbsolutePath(String relativePath) {
         Path relPath = Paths.get(relativePath);
         Path absolutePath = null;
         if (!relPath.isAbsolute()) {
@@ -128,6 +137,9 @@ public class DriverSetUp {
         return absolutePath.normalize().toString();
     }
 
+    /**
+     * Get Operating System for mahcine running the test
+     */
     public String getOsName() {
         String osType;
         String osName = "";
@@ -147,16 +159,22 @@ public class DriverSetUp {
         return osName;
     }
 
+    /**
+     * Wait for seconds while element not present
+     */
     public void waitForElement(By selector) {
-        WebDriverWait wait = new WebDriverWait(driver,5);
+        WebDriverWait wait = new WebDriverWait(driver, 5);
         wait.until(ExpectedConditions.visibilityOfElementLocated(selector));
     }
 
-    public void highLighterMethod(WebDriver driver, WebElement element){
+    public void highLighterMethod(WebDriver driver, WebElement element) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].setAttribute('style', 'background: ; border: 2px solid green;');", element);
     }
 
+    /**
+     * Wait for specified number of seconds
+     */
     public void secondsDelay(int sec) {
         int timeInMilliSeconds;
         try {
@@ -169,8 +187,10 @@ public class DriverSetUp {
             logger.info(e.getStackTrace());
         }
     }
-
-    public  void scrollToElement(WebDriver driver,WebElement element) throws InterruptedException {
+    /**
+     * Scroll to specific element on the page
+     */
+    public void scrollToElement(WebDriver driver, WebElement element) throws InterruptedException {
         String key = "";
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView(true);", element);

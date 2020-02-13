@@ -14,9 +14,9 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
-public class TakeAwaySteps extends DriverSetUp {
+public class OrderMealSteps extends BasePage {
 
-    private static Logger logger = Logger.getLogger(TakeAwaySteps.class);
+    private static Logger logger = Logger.getLogger(OrderMealSteps.class);
     private String menuPrice;
     private String mealName;
     private String mealPrice;
@@ -35,7 +35,7 @@ public class TakeAwaySteps extends DriverSetUp {
     public void user_is_on_take_away_landing_page() {
         try {
             String landingPageTitle = driver.getTitle();
-            Assert.assertEquals(landingPageTitle, PageData.LANDING_PAGE_TITLE);
+            Assert.assertEquals(landingPageTitle, getConfigPropertyValue(propertyFile, "landing_page_title"));
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
         } catch (AssertionError error) {
@@ -46,15 +46,14 @@ public class TakeAwaySteps extends DriverSetUp {
     @And("^user can see time to order food message$")
     public void user_can_see_time_to_order_food_message() {
         try {
-            boolean isDisplayed = driver.findElement(By.className(PageObjects.LANDING_PAGE_HEADER)).isDisplayed();
-            Assert.assertTrue(isDisplayed);
+            String message = driver.findElement(By.className(PageObjects.LANDING_PAGE_HEADER)).getText();
+            Assert.assertEquals(message, getConfigPropertyValue(propertyFile, "landing_page_messsag"));
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
         } catch (AssertionError error) {
             logger.error(error.getMessage());
         }
     }
-
 
     @When("^user search for address \"([^\"]*)\"$")
     public void user_enter_search_for_address_something(String address) {
@@ -100,7 +99,7 @@ public class TakeAwaySteps extends DriverSetUp {
         try {
             waitForElement(By.xpath(PageObjects.ADDRESS_SUGGESTION));
             int size = driver.findElements(By.xpath(PageObjects.ADDRESS_SUGGESTION)).size();
-            Assert.assertEquals(1,size);
+            Assert.assertEquals(1, size);
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
         } catch (AssertionError error) {
@@ -112,7 +111,7 @@ public class TakeAwaySteps extends DriverSetUp {
     public void user_is_on_searched_address_page() {
         try {
             String pageTitle = driver.getTitle();
-            Assert.assertEquals(pageTitle, PageData.ORDER_ADDRES_PAGE_TITLE);
+            Assert.assertEquals(pageTitle, getConfigPropertyValue(propertyFile, "order_address_page_title"));
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
         } catch (AssertionError error) {
@@ -189,7 +188,7 @@ public class TakeAwaySteps extends DriverSetUp {
     public void menu_details_are_shown() {
         try {
             mealName = driver.findElement(By.className(PageObjects.MEAL_NAME)).getText();
-            mealPrice= driver.findElement(By.className(PageObjects.MEAL_PRICE)).getText();
+            mealPrice = driver.findElement(By.className(PageObjects.MEAL_PRICE)).getText();
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
         }
@@ -249,22 +248,11 @@ public class TakeAwaySteps extends DriverSetUp {
             logger.info(ex.getMessage());
         }
     }
-//
-//    @And("^cart order button is enabled$")
-//    public void cart_order_button_is_enabled() {
-//        try {
-//             WebElement cartTotal= driver.findElement(By.className(PageObjects.CART_TOTAL));
-//             String cartTotalStringValue = cartTotal.getText();
-//             double cartTotalValue = Integer.parseInt(cartTotalStringValue);
-//             Assert.assertTrue(cartTotalValue > 0.0);
-//        } catch (WebDriverException ex) {
-//            logger.info(ex.getMessage());
-//        }
-//    }
 
     @And("^user can see delivery address details header$")
     public void user_can_see_delivery_address_details_header() {
         try {
+            secondsDelay(2);
             int size = driver.findElements(By.className(PageObjects.ON_DELIVERY_PAGE)).size();
             Assert.assertEquals(1, size);
         } catch (WebDriverException ex) {
@@ -392,7 +380,7 @@ public class TakeAwaySteps extends DriverSetUp {
     public void user_select_pay_with_option_something(String payWith) {
         try {
             secondsDelay(2);
-            scrollToElement(driver,driver.findElement(By.id(PageObjects.PAY_WITH)));
+            scrollToElement(driver, driver.findElement(By.id(PageObjects.PAY_WITH)));
             Select dropDown = new Select(driver.findElement(By.id(PageObjects.PAY_WITH)));
             dropDown.selectByVisibleText(payWith);
         } catch (InterruptedException ex) {
@@ -454,10 +442,10 @@ public class TakeAwaySteps extends DriverSetUp {
     @And("^user can see ordered meal details$")
     public void user_can_see_ordered_meal_details() {
         try {
-            scrollToElement(driver,driver.findElement(By.className(PageObjects.SUCCESS_ORDER_MENU_NAME)));
+            scrollToElement(driver, driver.findElement(By.className(PageObjects.SUCCESS_ORDER_MENU_NAME)));
             String orderedMealName = driver.findElement(By.className(PageObjects.SUCCESS_ORDER_MENU_NAME)).getText();
             String orderedDrinkName = driver.findElement(By.className(PageObjects.SUCCESS_ORDER_MENU_SIDES)).getText();
-            Assert.assertEquals(orderedMealName,mealName);
+            Assert.assertEquals(orderedMealName, mealName);
             Assert.assertTrue(selectedDrink.contains(orderedDrinkName));
         } catch (InterruptedException ex) {
             logger.info(ex.getMessage());

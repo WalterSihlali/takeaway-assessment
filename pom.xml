@@ -40,14 +40,8 @@
                 <forkMode>perthread</forkMode>
                 <threadCount>2</threadCount>
                 <includes>
-                    <include>FireFoxTestRunner.java</include>
-                    <include>ChromeTestRunner.java</include>
+                    <include>TestRunner.java</include>
                 </includes>
-
-                <!--<goal>-->
-                    <!--<browserInstance>1</browserInstance>-->
-                    <!--<browserInstance>2</browserInstance>-->
-                <!--</goal>-->
             </configuration>
         </plugin>
 

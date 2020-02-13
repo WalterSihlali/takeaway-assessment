@@ -15,15 +15,14 @@ import java.util.Calendar;
 
 @CucumberOptions(
         features = {"src/test/features"},
-//        tags = {"@chrome"},
-        dryRun = false,
         format = {"pretty"},
         plugin = {"com.cucumber.listener.ExtentCucumberFormatter:target/cucumber-reports/takeway-report.html"}
         , monochrome = true)
 
 
-public class ChromeTestRunner {
-    private static Logger logger = Logger.getLogger(ChromeTestRunner.class);
+public class TestRunner {
+
+    private static Logger logger = Logger.getLogger(TestRunner.class);
 
     @AfterClass
     public static void writeExtentReport() throws IOException {
@@ -32,7 +31,9 @@ public class ChromeTestRunner {
         Reporter.loadXMLConfig("extent-config.xml");
     }
 
-    /***EXTENT REPORT****************************************************************/
+    /**
+     * Copy report file from target to reports folder
+     */
     private static void copyFileUsingStream(File source, File dest) throws IOException {
         InputStream inputStream = null;
         OutputStream outputStream = null;
@@ -57,6 +58,10 @@ public class ChromeTestRunner {
         }
     }
 
+    /**
+     * Add time stamp to current report when new one is generated
+     * Copy report file from target to reports folder
+     */
     public static void copyLatestExtentReport() throws IOException {
         String timestamp = new SimpleDateFormat("yyyy:MM:dd_HH:mm:ss").format(Calendar.getInstance().getTime()).replaceAll(":", "-");
         File source = new File(System.getProperty("user.dir") + "/target/cucumber-reports/takeway-report.html");
@@ -66,7 +71,7 @@ public class ChromeTestRunner {
             try {
                 file.mkdir();
             } catch (Exception ex) {
-               logger.info( ex.getLocalizedMessage());
+                logger.info( ex.getLocalizedMessage());
             }
         }
 
