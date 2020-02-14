@@ -1,5 +1,6 @@
 package takeAway;
 
+import freemarker.log.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -13,96 +14,24 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 
 public class BasePage {
 
-    protected static WebDriver driver;
-    protected JavascriptExecutor jExecutor;
-    protected WebDriverWait driverWait;
-    private static Logger logger = Logger.getLogger(BasePage.class.getName());
-    protected String propertyFile = "./src/test/resources/takeaway.properties";
+    static WebDriver driver;
+   JavascriptExecutor jExecutor;
+    WebDriverWait driverWait;
+     static Logger logger = Logger.getLogger(BasePage.class.getName());
+     String propertyFile = "./src/test/resources/takeaway.properties";
 
 
-    protected WebDriver setupWebDriver() {
-        String macDriverLocation = "./src/test/resources//drivers/mac/";
-        String linuxDriverLocation = "./src/test/resources//drivers/linux/";
-        String windowsDriverLocation = "./src/test/resources/drivers/windows/";
-        String browserName = getConfigPropertyValue(propertyFile, "browser");
-
-        switch (browserName) {
-            case "chrome":
-                /**
-                 * Driver setup for google chrome web browser
-                 */
-                String chromeDriverPath = null;
-
-                if (this.getOsName().equalsIgnoreCase("Windows")) {
-                    chromeDriverPath = windowsDriverLocation + "chromedriver.exe";
-                } else if (this.getOsName().equalsIgnoreCase("Mac OS")) {
-                    chromeDriverPath = macDriverLocation + "chromedriver";
-                } else if (this.getOsName().equalsIgnoreCase("Linux")) {
-                    chromeDriverPath = linuxDriverLocation + "chromedriver";
-                }
-                logger.info("This is the chrome driver path is :::: " + chromeDriverPath);
-
-                String absoluteChromeDriverPath = toAbsolutePath(chromeDriverPath);
-                logger.info("This is the chrome driver real path is :::: " + absoluteChromeDriverPath);
-
-                System.setProperty("webdriver.chrome.driver", absoluteChromeDriverPath);
-                ChromeOptions options = new ChromeOptions();
-                options.addArguments("test-type");
-                options.addArguments("--disable-extensions");
-                driver = new ChromeDriver(options);
-
-                try {
-                    jExecutor = (JavascriptExecutor) driver;
-                    driver.manage().window().maximize();
-                    driverWait = new WebDriverWait(driver, 5);
-                } catch (Exception ex) {
-                    logger.info("The stack trace here happens when I try to maximize the screen");
-                    logger.info(ex.getMessage());
-                }
-                break;
-
-            case "firefox":
-
-                /**
-                 * Driver setup for firefox web browser
-                 */
-                String firefoxDriverPath = null;
-                logger.info("Firefox ?: " + browserName);
-                if (this.getOsName().equalsIgnoreCase("Windows")) {
-                    firefoxDriverPath = windowsDriverLocation + "geckodriver.exe";
-                } else if (this.getOsName().equalsIgnoreCase("Mac OS")) {
-                    firefoxDriverPath = macDriverLocation + "geckodriver";
-                } else if (this.getOsName().equalsIgnoreCase("Linux")) {
-                    firefoxDriverPath = linuxDriverLocation + "geckodriver";
-                }
-                logger.info("This is the firefox driver path is :::: " + firefoxDriverPath);
-
-                String absoluteFirefoxDriverPath = toAbsolutePath(firefoxDriverPath);
-                logger.info("This is the chrome driver real path is :::: " + absoluteFirefoxDriverPath);
-
-                System.setProperty("webdriver.gecko.driver", absoluteFirefoxDriverPath);
-                driver = new FirefoxDriver();
-
-                try {
-
-                    jExecutor = (JavascriptExecutor) driver;
-                    driver.manage().window().maximize();
-                    driverWait = new WebDriverWait(driver, 5);
-                } catch (Exception ex) {
-                    logger.info("The stack trace here happens when I try to maximize the screen");
-                    logger.info(ex.getMessage());
-                }
-        }
-
-
-        return driver;
-
-    }
+//    protected WebDriver setupWebDriver() {
+//
+//
+//
+////        return driver;
+//
+//    }
 
 
     /**
@@ -126,7 +55,7 @@ public class BasePage {
     /**
      * Convert path to absolute location
      */
-    private static String toAbsolutePath(String relativePath) {
+    static String toAbsolutePath(String relativePath) {
         Path relPath = Paths.get(relativePath);
         Path absolutePath = null;
         if (!relPath.isAbsolute()) {
@@ -162,7 +91,7 @@ public class BasePage {
      * Wait for seconds while element not present
      */
     public void waitForElement(By selector) {
-        WebDriverWait wait = new WebDriverWait(driver, 5);
+        WebDriverWait wait = new WebDriverWait(driver, 20);
         wait.until(ExpectedConditions.visibilityOfElementLocated(selector));
     }
 
@@ -189,10 +118,14 @@ public class BasePage {
     /**
      * Scroll to specific element on the page
      */
-    public void scrollToElement(WebDriver driver, WebElement element) throws InterruptedException {
-        String key = "";
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView(true);", element);
-        Thread.sleep(2000);
+    public void scrollToElement( WebElement element) throws InterruptedException {
+//        String key = "";
+//        JavascriptExecutor js = (JavascriptExecutor) driver;
+//        js.executeScript("arguments[0].scrollIntoView(true);", element);
+//        Thread.sleep(2000);
+
+//        Actions actions = new Actions(driver);
+        JavascriptExecutor js = (JavascriptExecutor)driver;
+        js.executeScript("arguments[0].scrollIntoView()", element);
     }
 }

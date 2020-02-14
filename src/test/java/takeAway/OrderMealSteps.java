@@ -5,21 +5,21 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 
 import cucumber.api.java.en.When;
+import freemarker.log.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.Parameters;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 public class OrderMealSteps extends BasePage {
 
     private static Logger logger = Logger.getLogger(OrderMealSteps.class.getName());
     private String menuPrice;
     private String mealName;
-    private String mealPrice;
     private String selectedDrink;
 
     @Given("^user launch takeaway web application$")
@@ -35,7 +35,7 @@ public class OrderMealSteps extends BasePage {
     public void user_is_on_take_away_landing_page() {
         try {
             String landingPageTitle = driver.getTitle();
-            Assert.assertEquals(landingPageTitle, getConfigPropertyValue(propertyFile, "landing_page_title"));
+            Assert.assertEquals( getConfigPropertyValue(propertyFile, "landing_page_title"),landingPageTitle);
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
         }
@@ -45,14 +45,14 @@ public class OrderMealSteps extends BasePage {
     public void user_can_see_time_to_order_food_message() {
         try {
             String message = driver.findElement(By.className(PageObjects.LANDING_PAGE_HEADER)).getText();
-            Assert.assertEquals(message, getConfigPropertyValue(propertyFile, "landing_page_messsag"));
+            Assert.assertEquals(message, getConfigPropertyValue(propertyFile, "landing_page_message"));
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
         }
     }
 
     @When("^user search for address \"([^\"]*)\"$")
-    public void user_enter_search_for_address_something(String address) {
+    public void user_enter_search_for_address(String address) {
         try {
             WebElement addressField = driver.findElement(By.id(PageObjects.ADDRESS_SEARCH_AREA));
             highLighterMethod(driver, addressField);
@@ -64,7 +64,7 @@ public class OrderMealSteps extends BasePage {
     }
 
     @And("^user select address \"([^\"]*)\" from search results$")
-    public void user_select_address_something_from_search_results(String address) {
+    public void user_select_address_from_search_results(String address) {
         try {
             WebElement searchResults = driver.findElement(By.xpath(PageObjects.SEARCH_RESULTS_VALUE));
             highLighterMethod(driver, searchResults);
@@ -150,7 +150,7 @@ public class OrderMealSteps extends BasePage {
     }
 
     @Then("^user can see selected drink details$")
-    public void user_select_menu_drink_something() {
+    public void user_select_menu_drink_selected() {
         try {
             secondsDelay(2);
             Select select = new Select(driver.findElement(By.name(PageObjects.SELECTED_DRINK)));
@@ -176,14 +176,14 @@ public class OrderMealSteps extends BasePage {
     public void menu_details_are_shown() {
         try {
             mealName = driver.findElement(By.className(PageObjects.MEAL_NAME)).getText();
-            mealPrice = driver.findElement(By.className(PageObjects.MEAL_PRICE)).getText();
+            String  mealPrice = driver.findElement(By.className(PageObjects.MEAL_PRICE)).getText();
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
         }
     }
 
     @Then("^user can see menu total price to pay$")
-    public void user_can_see_menu_total_price_something_to_pay() {
+    public void user_can_see_menu_total_price_to_pay() {
         try {
             secondsDelay(2);
             String totalPrice = driver.findElement(By.className(PageObjects.MEAL_PRICE_BUTTON)).getText().replace("Add", "").trim();
@@ -195,13 +195,12 @@ public class OrderMealSteps extends BasePage {
         }
     }
 
-    @Then("^user can cart total price$")
-    public void user_can_cart_total_price_something() {
+    @Then("^user can see cart total price$")
+    public void user_can_see_cart_total_price() {
         try {
-
+            waitForElement((By.className(PageObjects.CART_TOTAL)));
             String cartTotal = driver.findElement(By.className(PageObjects.CART_TOTAL)).getText();
-            Assert.assertEquals(cartTotal, menuPrice);
-
+            Assert.assertEquals(menuPrice, cartTotal);
         } catch (WebDriverException ex) {
             logger.info(ex.getMessage());
         }
@@ -217,20 +216,11 @@ public class OrderMealSteps extends BasePage {
         }
     }
 
-//    @Then("^user can see payment reference number $")
-//    public void user_can_see_payment_reference_number() {
-//        try {
-//
-//        } catch (WebDriverException ex) {
-//            logger.info(ex.getMessage());
-//        }
-//    }
-
     @And("^user select button to add menu to cart$")
     public void user_select_button_to_add_menu_to_cart() {
         try {
 //            waitForElement(By.className(PageObjects.MEAL_PRICE_BUTTON));
-            secondsDelay(3);
+            secondsDelay(5);
             driver.findElement(By.className(PageObjects.MEAL_PRICE_BUTTON)).click();
         } catch (Exception ex) {
             logger.info(ex.getMessage());
@@ -240,7 +230,7 @@ public class OrderMealSteps extends BasePage {
     @And("^user can see delivery address details header$")
     public void user_can_see_delivery_address_details_header() {
         try {
-            secondsDelay(2);
+            waitForElement(By.className(PageObjects.ON_DELIVERY_PAGE));
             int size = driver.findElements(By.className(PageObjects.ON_DELIVERY_PAGE)).size();
             Assert.assertEquals(1, size);
         } catch (WebDriverException ex) {
@@ -249,7 +239,7 @@ public class OrderMealSteps extends BasePage {
     }
 
     @And("^user enter delivery address \"([^\"]*)\"$")
-    public void user_enter_delivery_address_something(String deliveryAddress) {
+    public void user_enter_delivery_address_(String deliveryAddress) {
         try {
             WebElement addressEditText = driver.findElement(By.id(PageObjects.ADDRESS));
             highLighterMethod(driver, addressEditText);
@@ -261,7 +251,7 @@ public class OrderMealSteps extends BasePage {
     }
 
     @And("^user enter delivery postal code \"([^\"]*)\"$")
-    public void user_enter_delivery_postal_code_something(String postalCode) {
+    public void user_enter_delivery_postal_code(String postalCode) {
         try {
             WebElement postalCodeEditText = driver.findElement(By.id(PageObjects.POSTAL_CODE));
             highLighterMethod(driver, postalCodeEditText);
@@ -273,7 +263,7 @@ public class OrderMealSteps extends BasePage {
     }
 
     @And("^user enter delivery city \"([^\"]*)\"$")
-    public void user_enter_delivery_city_something(String city) {
+    public void user_enter_delivery_city(String city) {
         try {
             WebElement cityEditText = driver.findElement(By.id(PageObjects.CITY));
             highLighterMethod(driver, cityEditText);
@@ -285,7 +275,7 @@ public class OrderMealSteps extends BasePage {
     }
 
     @And("^user enter delivery person name \"([^\"]*)\"$")
-    public void user_enter_delivery_person_name_something(String personName) {
+    public void user_enter_delivery_person_name(String personName) {
         try {
             WebElement nameEditText = driver.findElement(By.id(PageObjects.NAME));
             highLighterMethod(driver, nameEditText);
@@ -297,7 +287,7 @@ public class OrderMealSteps extends BasePage {
     }
 
     @And("^user enter email \"([^\"]*)\"$")
-    public void user_enter_email_something(String email) {
+    public void user_enter_email(String email) {
         try {
             WebElement emailEditText = driver.findElement(By.id(PageObjects.EMAIL));
             highLighterMethod(driver, emailEditText);
@@ -309,7 +299,7 @@ public class OrderMealSteps extends BasePage {
     }
 
     @And("^user enter delivery phone number \"([^\"]*)\"$")
-    public void user_enter_delivery_phone_number_something(String phoneNumber) {
+    public void user_enter_delivery_phone_number(String phoneNumber) {
         try {
             WebElement phoneEditText = driver.findElement(By.id(PageObjects.PHONE_NUMBER));
             highLighterMethod(driver, phoneEditText);
@@ -321,7 +311,7 @@ public class OrderMealSteps extends BasePage {
     }
 
     @And("^user enter company name \"([^\"]*)\"$")
-    public void user_enter_company_name_something(String companyName) {
+    public void user_enter_company_name(String companyName) {
         try {
             WebElement companyEditText = driver.findElement(By.id(PageObjects.COMPANY_NAME));
             highLighterMethod(driver, companyEditText);
@@ -333,7 +323,7 @@ public class OrderMealSteps extends BasePage {
     }
 
     @Then("^as soon as possible delivery time selected \"([^\"]*)\"$")
-    public void user_select_delivery_time_something(String expectedDeliveryTime) {
+    public void user_select_delivery_time(String expectedDeliveryTime) {
         try {
             Select dropDown = new Select(driver.findElement(By.id(PageObjects.DELIVERY_TIME)));
             dropDown.selectByVisibleText(expectedDeliveryTime);
@@ -344,7 +334,7 @@ public class OrderMealSteps extends BasePage {
     }
 
     @And("^user enter delivery remarks \"([^\"]*)\"$")
-    public void user_enter_delivery_remarks_something(String remarks) {
+    public void user_enter_delivery_remarks(String remarks) {
         try {
             WebElement remarksTextArea = driver.findElement(By.id(PageObjects.DELIVERY_REMARKS));
             highLighterMethod(driver, remarksTextArea);
@@ -365,10 +355,10 @@ public class OrderMealSteps extends BasePage {
     }
 
     @And("^user select pay with option \"([^\"]*)\"$")
-    public void user_select_pay_with_option_something(String payWith) {
+    public void user_select_pay_with_option(String payWith) {
         try {
-            secondsDelay(2);
-            scrollToElement(driver, driver.findElement(By.id(PageObjects.PAY_WITH)));
+//            waitForElement(By.id(PageObjects.PAY_WITH_DETAILS));
+            scrollToElement(driver.findElement(By.id(PageObjects.PAY_WITH)));
             Select dropDown = new Select(driver.findElement(By.id(PageObjects.PAY_WITH)));
             dropDown.selectByVisibleText(payWith);
         } catch (InterruptedException ex) {
@@ -398,7 +388,7 @@ public class OrderMealSteps extends BasePage {
     @Then("^user can see thank you for your order message$")
     public void user_can_see_thank_you_for_your_order_message() {
         try {
-            secondsDelay(5);
+            waitForElement(By.className(PageObjects.THANK_YOU_WE_RECIEVED_ORDER));
             int size = driver.findElements(By.className(PageObjects.THANK_YOU_WE_RECIEVED_ORDER)).size();
             Assert.assertEquals(1, size);
         } catch (WebDriverException ex) {
@@ -418,7 +408,7 @@ public class OrderMealSteps extends BasePage {
     }
 
     @And("^user can see restaurant order from name \"([^\"]*)\"$")
-    public void user_can_see_restaurant_order_from_name_something(String restaurantName) {
+    public void user_can_see_restaurant_order_from_name(String restaurantName) {
         try {
             String name = driver.findElement(By.className(PageObjects.ORDER_RESTAURANT)).getText();
             Assert.assertEquals(name, restaurantName);
@@ -430,7 +420,7 @@ public class OrderMealSteps extends BasePage {
     @And("^user can see ordered meal details$")
     public void user_can_see_ordered_meal_details() {
         try {
-            scrollToElement(driver, driver.findElement(By.className(PageObjects.SUCCESS_ORDER_MENU_NAME)));
+            scrollToElement(driver.findElement(By.className(PageObjects.SUCCESS_ORDER_MENU_NAME)));
             String orderedMealName = driver.findElement(By.className(PageObjects.SUCCESS_ORDER_MENU_NAME)).getText();
             String orderedDrinkName = driver.findElement(By.className(PageObjects.SUCCESS_ORDER_MENU_SIDES)).getText();
             Assert.assertEquals(orderedMealName, mealName);

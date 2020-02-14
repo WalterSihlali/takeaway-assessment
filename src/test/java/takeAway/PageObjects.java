@@ -33,6 +33,7 @@ class PageObjects {
     static String SAVE_DELIVERY_REMARKS = "isaveremarks";
     static String HOW_WOULD_YOU_LIKE_YOUR_FOOD = "checkout-subheader-text";
     static String HOW_WOULD_YOU_LIKE_TO_PAY = "subtitle paymenttitle";
+    static String PAY_WITH_DETAILS ="pulldown";
     static String PAY_WITH = "ipayswith";
     static String VOUCHER = "ivouchercontainerr";
     static String NEWS_LETTER_CHECKBOX = "inewsletter";
