@@ -1,6 +1,7 @@
-Feature: Restaurant application
+Feature: As a user I want to be able to order a meal from my favourite restaurant near my location on takeaway.com
 
-  Scenario Outline: Case 1 Scenario
+  @positive-scenario @order-meal
+  Scenario Outline: Order food from takeway.com
     Given user launch takeaway web application
     Then user is on takeaway landing page
     And user can see time to order food message
@@ -9,8 +10,11 @@ Feature: Restaurant application
     When user select address "<address>" from search results
     Then user is on searched address page
     And address restaurants list is shown
+    When user search for restaurant "<restaurant name>"
+    Then address restaurants list is shown
     When user select restaurant listed under address
     Then user is on restaurant "<restaurant name>" details page
+    When user search for meal "<meal name>"
     And meal for purchase details are shown
     When user select first menu on the menu list
     And user can see selected drink details
@@ -20,9 +24,9 @@ Feature: Restaurant application
     When user select cart order button
     Then user is on ready to eat page
     And user can see delivery address details header
-    And user enter delivery address "<delivery address>"
+    When user enter delivery address "<delivery address>"
     And user enter delivery postal code "<postal code>"
-    And user enter delivery city "<city>"€ 19,00
+    And user enter delivery city "<city>"
     And user enter delivery person name "<person name>"
     And user enter email "<email>"
     And user enter delivery phone number "<phone number>"
@@ -40,15 +44,13 @@ Feature: Restaurant application
     And user can see order success reference number
 
     Examples:
-      | address | restaurant name          | delivery address | city     | postal code | person name | email              | phone number | company name | delivery time       | remarks                          | pay with |
-      | 8888    | TEST Restaurant Selenium | main street 2415 | Enschede | 8888AA      | TestUSer    | testuser@test.test | 1234567890   | Takeaway.com | As soon as possible | Leave the order at the reception |   |
-
-    #Your postcode is invalid or incomplete (a valid and complete postcode should look like this: 1017AB). Check and correct the postcode then try again.
+      | address | restaurant name          |meal name| delivery address | city     | postal code | person name | email              | phone number | company name | delivery time       | remarks                          | pay with |
+      | 8888    | TEST Restaurant Selenium |Duck Breast |main street 2415 | Enschede | 8888AA      | TestUSer    | testuser@test.test | 1234567890   | Takeaway.com | As soon as possible | Leave the order at the reception |€ 19,00   |
 
  # defetc as data not being save when use come to re-order
 
-
-  Scenario Outline: Case 2 Scenario
+  @positive-scenario @re-order-meal
+  Scenario Outline: Re-order food from takeway.com
     Given user launch takeaway web application
     Then user is on takeaway landing page
     And user can see time to order food message
@@ -78,4 +80,36 @@ Feature: Restaurant application
     Examples:
       | address | restaurant name          | delivery time       |
       | 8888    | TEST Restaurant Selenium | As soon as possible |
+
+
+  @negative-scenario @restaurant-not_found
+  Scenario Outline: Search for restaurant not near address
+    Given user launch takeaway web application
+    Then user is on takeaway landing page
+    And user can see time to order food message
+    When user search for address "<address>"
+    Then search results popup is shown
+    When user select address "<address>" from search results
+    Then user is on searched address page
+    And address restaurants list is shown
+    When user search for restaurant "<restaurant name>"
+    Then searched restaurants not found
+
+    Examples:
+      | address | restaurant name          |
+      | 8888    | Roccomamas               |
+
+  @negative-scenario @address-not-found
+  Scenario Outline: Search for address not in Europe
+    Given user launch takeaway web application
+    Then user is on takeaway landing page
+    And user can see time to order food message
+    When user search for address "<address>"
+    And user select show address button
+    Then invalid searched address message is shown
+
+    Examples:
+      | address |
+      | 2194   |
+
 

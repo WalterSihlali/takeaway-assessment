@@ -4,41 +4,27 @@ import com.cucumber.listener.Reporter;
 import freemarker.log.Logger;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Properties;
 
-
-public class BasePage {
+public class BaseUtilities {
 
     static WebDriver driver;
-   JavascriptExecutor jExecutor;
+    JavascriptExecutor jExecutor;
     WebDriverWait driverWait;
-     static Logger logger = Logger.getLogger(BasePage.class.getName());
-     String propertyFile = "./src/test/resources/takeaway.properties";
-   static String screenshotName;
-   String appURL = getConfigPropertyValue(propertyFile,"url");
-
-
-
-//    protected WebDriver setupWebDriver() {
-//
-//
-//
-////        return driver;
-//
-//    }
-
+    static Logger logger = Logger.getLogger(BaseUtilities.class.getName());
+    String propertyFile = "./src/test/resources/takeaway.properties";
+    private static String screenshotName;
+    String appURL = getConfigPropertyValue(propertyFile, "url");
 
     /**
      * Read data from properties file
@@ -64,11 +50,15 @@ public class BasePage {
     static String toAbsolutePath(String relativePath) {
         Path relPath = Paths.get(relativePath);
         Path absolutePath = null;
+        String pathString = null;
         if (!relPath.isAbsolute()) {
             Path base = Paths.get("");
             absolutePath = base.resolve(relPath).toAbsolutePath();
         }
-        return absolutePath.normalize().toString();
+        if (absolutePath != null)
+            pathString = absolutePath.normalize().toString();
+
+        return pathString;
     }
 
     /**
@@ -93,13 +83,6 @@ public class BasePage {
         return osName;
     }
 
-    /**
-     * Wait for seconds while element not present
-     */
-//    public void waitForElement(By selector) {
-//        WebDriverWait wait = new WebDriverWait(driver, 20);
-//        wait.until(ExpectedConditions.visibilityOfElementLocated(selector));
-//    }
 
     public void highLighterMethod(WebDriver driver, WebElement element) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -121,43 +104,43 @@ public class BasePage {
             logger.info(e.getMessage());
         }
     }
+
     /**
      * Scroll to specific element on the page
      */
-    public void scrollToElement( WebElement element) throws InterruptedException {
-//        String key = "";
-//        JavascriptExecutor js = (JavascriptExecutor) driver;
-//        js.executeScript("arguments[0].scrollIntoView(true);", element);
-//        Thread.sleep(2000);
-
-//        Actions actions = new Actions(driver);
-        JavascriptExecutor js = (JavascriptExecutor)driver;
+    public void scrollToElement(WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView()", element);
     }
 
 
     public void waitForElement(By selector) {
-        WebDriverWait wait = new WebDriverWait(driver,50);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(selector));
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, 15);
+            wait.until(ExpectedConditions.visibilityOfElementLocated(selector));
+        } catch (TimeoutException ex) {
+            logger.info("Timeout waiting for element to be visible : ", ex);
+        }
     }
 
     public static String returnDateTimeStamp(String fileExtension) {
-        Date d = new Date();
-        String date = d.toString().replace(":", "_").replace(" ", "_") + fileExtension;
-        return date;
+        Date date = new Date();
+        return date.toString().replace(":", "_").replace(" ", "_") + fileExtension;
     }
 
-    public void captureScreenshot() throws IOException, InterruptedException {
-        File srcFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-
-        screenshotName = returnDateTimeStamp(".jpg");
-
-        FileUtils.copyFile(srcFile, new File(System.getProperty("user.dir") + "/reports/screenshots/" + screenshotName));
-
-        Reporter.addStepLog("Taking a screenshot!");
-        Reporter.addStepLog("<br>");
-        Reporter.addStepLog("<a target=\"_blank\", href="+ returnScreenshotName() + "><img src="+ returnScreenshotName()+ " height=200 width=300></img></a>");
+    public void captureScreenshot() {
+        try {
+            File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            screenshotName = returnDateTimeStamp(".jpg");
+            FileUtils.copyFile(srcFile, new File(System.getProperty("user.dir") + "/reports/screenshots/" + screenshotName));
+            Reporter.addStepLog("Taking a screenshot!");
+            Reporter.addStepLog("<br>");
+            Reporter.addStepLog("<a target=\"_blank\", href=" + returnScreenshotName() + "><img src=" + returnScreenshotName() + " height=200 width=300></img></a>");
+        } catch (IOException ex) {
+            logger.info("File is not found on the given path ",ex);
+        }
     }
+
 
     public static String returnScreenshotName() {
         return (System.getProperty("user.dir") + "/reports/screenshot/" + screenshotName);

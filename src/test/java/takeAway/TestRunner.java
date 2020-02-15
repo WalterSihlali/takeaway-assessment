@@ -44,24 +44,24 @@ public class TestRunner {
             byte[] buffer = new byte[1024];
             int length;
 
-            while((length = inputStream.read(buffer)) > 0) {
+            while ((length = inputStream.read(buffer)) > 0) {
                 outputStream.write(buffer, 0, length);
             }
         } finally {
-            try{
+            if (inputStream != null) {
                 inputStream.close();
-                outputStream.close();
             }
-            catch (NullPointerException ex) {
-                logger.info(ex.getMessage());
+
+            if (outputStream != null) {
+                outputStream.close();
             }
         }
     }
 
-    /**
-     * Add time stamp to current report when new one is generated
-     * Copy report file from target to reports folder
-     */
+        /**
+         * Add time stamp to current report when new one is generated
+         * Copy report file from target to reports folder
+         */
     public static void copyLatestExtentReport() throws IOException {
         String timestamp = new SimpleDateFormat("yyyy:MM:dd_HH:mm:ss").format(Calendar.getInstance().getTime()).replaceAll(":", "-");
         File source = new File(System.getProperty("user.dir") + "/target/cucumber-reports/takeway-report.html");

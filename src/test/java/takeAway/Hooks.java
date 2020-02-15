@@ -11,13 +11,13 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.concurrent.TimeUnit;
 
-public class Hooks extends BasePage {
+public class Hooks extends BaseUtilities {
 
     @Before
     public void setUp() {
-        String macDriverLocation = "./src/test/resources//drivers/mac/";
-        String linuxDriverLocation = "./src/test/resources//drivers/linux/";
-        String windowsDriverLocation = "./src/test/resources/drivers/windows/";
+        String macDriverLocation = getConfigPropertyValue(propertyFile, "mac_driver_location");
+        String linuxDriverLocation = getConfigPropertyValue(propertyFile, "linux_driver_location");
+        String windowsDriverLocation = getConfigPropertyValue(propertyFile, "windows_driver_location");
         String browserName = getConfigPropertyValue(propertyFile, "browser");
         String runInHeadlessMode = getConfigPropertyValue(propertyFile, "headless");
 

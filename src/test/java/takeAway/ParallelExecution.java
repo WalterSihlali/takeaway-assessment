@@ -6,7 +6,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
-public class ParallelExecution extends BasePage {
+public class ParallelExecution extends BaseUtilities {
 
    private OrderMealSteps orderMealSteps = new OrderMealSteps();
    private String propertyFile = "./src/test/resources/takeaway.properties";
@@ -16,9 +16,9 @@ public class ParallelExecution extends BasePage {
     @BeforeTest
     @Parameters({"browser"})
     public void before(String browser) {
-        String macDriverLocation = "./src/test/resources//drivers/mac/";
-        String linuxDriverLocation = "./src/test/resources//drivers/linux/";
-        String windowsDriverLocation = "./src/test/resources/drivers/windows/";
+        String macDriverLocation = getConfigPropertyValue(propertyFile, "mac_driver_location");;
+        String linuxDriverLocation = getConfigPropertyValue(propertyFile, "linux_driver_location");
+        String windowsDriverLocation = getConfigPropertyValue(propertyFile, "windows_driver_location");
         String runInHeadlessMode = getConfigPropertyValue(propertyFile, "headless");
 
         switch (browser) {
@@ -105,7 +105,6 @@ public class ParallelExecution extends BasePage {
         }
     }
 
-
     @Test
     public void parallelTest() {
         driver.get(appURL);
@@ -144,6 +143,5 @@ public class ParallelExecution extends BasePage {
         orderMealSteps.user_can_see_restaurant_order_from_name(getConfigPropertyValue(propertyFile, "restaurant_name"));
         orderMealSteps.user_can_see_ordered_meal_details();
         orderMealSteps.user_can_see_payment_success_reference_number();
-
     }
 }

@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class OrderMealSteps extends BasePage {
+public class OrderMealSteps extends BaseUtilities {
 
     private static Logger logger = Logger.getLogger(OrderMealSteps.class.getName());
     private String menuPrice;
@@ -63,6 +63,34 @@ public class OrderMealSteps extends BasePage {
         }
     }
 
+    @When("^user search for restaurant \"([^\"]*)\"$")
+    public void user_enter_search_for_restaurant(String restaurant) {
+        try {
+            waitForElement(By.id(PageObjects.SEARCH_RESTAURANT));
+            WebElement addressField = driver.findElement(By.id(PageObjects.SEARCH_RESTAURANT));
+            highLighterMethod(driver, addressField);
+            addressField.clear();
+            addressField.sendKeys(restaurant);
+        } catch (NoSuchElementException ex) {
+            logger.info("Element not found",ex);
+        }
+    }
+
+    @When("^user search for meal \"([^\"]*)\"$")
+    public void user_enter_search_for_meals(String meal) {
+        try {
+            waitForElement(By.className(PageObjects.SEARCH_ICON));
+            driver.findElement(By.className(PageObjects.SEARCH_ICON)).click();
+            WebElement addressField = driver.findElement(By.className(PageObjects.SEARCH_MEAL));
+            highLighterMethod(driver, addressField);
+            addressField.clear();
+            addressField.sendKeys(meal);
+        } catch (NoSuchElementException ex) {
+            logger.info("Element not found",ex);
+        }
+    }
+
+
     @And("^user select address \"([^\"]*)\" from search results$")
     public void user_select_address_from_search_results(String address) {
         try {
@@ -103,6 +131,26 @@ public class OrderMealSteps extends BasePage {
         }
     }
 
+    @When("^user select show address button$")
+    public void user_select_show_address_button() {
+        try {
+            waitForElement(By.id(PageObjects.SHOW_DDRESS_RESULTS));
+           driver.findElement(By.id(PageObjects.SHOW_DDRESS_RESULTS)).click();
+        } catch (NoSuchElementException ex) {
+            logger.info("Element not found",ex);
+        }
+    }
+
+    @Then("^invalid searched address message is shown$")
+    public void invalid_searched_address_message_is_shown() {
+        try {
+            waitForElement(By.id(PageObjects.ADDRESS_ERROR));
+            int size = driver.findElements(By.id(PageObjects.ADDRESS_ERROR)).size();
+            Assert.assertEquals(1, size);
+        } catch (NoSuchElementException ex) {
+            logger.info("Element not found",ex);
+        }
+    }
     @Then("^user is on searched address page$")
     public void user_is_on_searched_address_page() {
         try {
@@ -128,10 +176,24 @@ public class OrderMealSteps extends BasePage {
         }
     }
 
+    @And("^searched restaurants not found$")
+    public void user_can_found_searched_restaurant() {
+        try {
+            waitForElement(By.id(PageObjects.SEARCH_RESTAURANT_NOT_FOUND));
+            int size = driver.findElements(By.id(PageObjects.SEARCH_RESTAURANT_NOT_FOUND)).size();
+            Assert.assertEquals(1,size);
+        } catch (NoSuchElementException ex) {
+            logger.info("Element not found",ex);
+        } catch (TimeoutException ex) {
+            logger.info("Timed out waiting for the element",ex);
+        }
+    }
+
     @When("^user select restaurant listed under address$")
     public void user_select_restaurants_from_address_list() {
         try {
-            driver.findElement(By.xpath(PageObjects.RESTAURANT_FROM_LIST)).click();
+            waitForElement(By.id(PageObjects.RESTAURANT_FROM_LIST));
+            driver.findElement(By.id(PageObjects.RESTAURANT_FROM_LIST)).click();
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
         }
@@ -162,8 +224,7 @@ public class OrderMealSteps extends BasePage {
             secondsDelay(2);
             Select select = new Select(driver.findElement(By.name(PageObjects.SELECTED_DRINK)));
             WebElement option = select.getFirstSelectedOption();
-            String defaultItem = option.getText();
-            selectedDrink = defaultItem;
+            selectedDrink = option.getText();
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
         }
@@ -374,8 +435,6 @@ public class OrderMealSteps extends BasePage {
             dropDown.selectByVisibleText(payWith);
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
-        } catch (InterruptedException ex) {
-            logger.info("Exception occurred while trying to scroll page down",ex);
         }
     }
 
@@ -440,8 +499,6 @@ public class OrderMealSteps extends BasePage {
 
             Assert.assertEquals(orderedMealName, mealName);
             Assert.assertTrue(selectedDrink.contains(orderedDrinkName));
-        } catch (InterruptedException ex) {
-            logger.info("Exception occurred while trying to scroll page down",ex);
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
         }
