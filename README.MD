@@ -1,4 +1,4 @@
-# Takaway Automation Assessment
+# Takeaway Automation Assessment
 This is a Maven java project for automation of order meal scenarios on Takeaway.com using selenium and cucumber framework.
 ## Prerequisites and installations
 - Install java and maven
