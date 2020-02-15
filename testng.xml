@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Test-class Suite" parallel="tests" thread-count="2">
+<suite name="Takeway Order Test Suite" parallel="tests" thread-count="2">
 
-    <test name="run-test-on-chrome">
-        <parameter name="browser" value="chrome" />
+    <test name="run-test-on-firefox">
+        <parameter name="browser" value="firefox" />
         <classes>
             <class name="takeAway.ParallelExecution">
             </class>
         </classes>
     </test>
 
-    <test name="run-test-on-firefox">
-        <parameter name="browser" value="firefox" />
+    <test name="run-test-on-chrome">
+        <parameter name="browser" value="chrome" />
         <classes>
             <class name="takeAway.ParallelExecution">
             </class>

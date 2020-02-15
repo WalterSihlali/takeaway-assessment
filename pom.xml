@@ -36,9 +36,9 @@
             <version>2.19.1</version>
 
             <configuration>
-                <parallel>classes</parallel>
-                <forkMode>perthread</forkMode>
-                <threadCount>2</threadCount>
+                <!--<parallel>classes</parallel>-->
+                <!--<forkMode>perthread</forkMode>-->
+                <!--<threadCount>2</threadCount>-->
                 <includes>
                     <include>TestRunner.java</include>
                 </includes>

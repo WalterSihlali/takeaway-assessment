@@ -1,6 +1,8 @@
 package takeAway;
 
+import com.cucumber.listener.Reporter;
 import freemarker.log.Logger;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -13,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.Properties;
 
 
@@ -23,6 +26,9 @@ public class BasePage {
     WebDriverWait driverWait;
      static Logger logger = Logger.getLogger(BasePage.class.getName());
      String propertyFile = "./src/test/resources/takeaway.properties";
+   static String screenshotName;
+   String appURL = getConfigPropertyValue(propertyFile,"url");
+
 
 
 //    protected WebDriver setupWebDriver() {
@@ -90,10 +96,10 @@ public class BasePage {
     /**
      * Wait for seconds while element not present
      */
-    public void waitForElement(By selector) {
-        WebDriverWait wait = new WebDriverWait(driver, 20);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(selector));
-    }
+//    public void waitForElement(By selector) {
+//        WebDriverWait wait = new WebDriverWait(driver, 20);
+//        wait.until(ExpectedConditions.visibilityOfElementLocated(selector));
+//    }
 
     public void highLighterMethod(WebDriver driver, WebElement element) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -128,4 +134,33 @@ public class BasePage {
         JavascriptExecutor js = (JavascriptExecutor)driver;
         js.executeScript("arguments[0].scrollIntoView()", element);
     }
+
+
+    public void waitForElement(By selector) {
+        WebDriverWait wait = new WebDriverWait(driver,50);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(selector));
+    }
+
+    public static String returnDateTimeStamp(String fileExtension) {
+        Date d = new Date();
+        String date = d.toString().replace(":", "_").replace(" ", "_") + fileExtension;
+        return date;
+    }
+
+    public void captureScreenshot() throws IOException, InterruptedException {
+        File srcFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+
+        screenshotName = returnDateTimeStamp(".jpg");
+
+        FileUtils.copyFile(srcFile, new File(System.getProperty("user.dir") + "/reports/screenshots/" + screenshotName));
+
+        Reporter.addStepLog("Taking a screenshot!");
+        Reporter.addStepLog("<br>");
+        Reporter.addStepLog("<a target=\"_blank\", href="+ returnScreenshotName() + "><img src="+ returnScreenshotName()+ " height=200 width=300></img></a>");
+    }
+
+    public static String returnScreenshotName() {
+        return (System.getProperty("user.dir") + "/reports/screenshot/" + screenshotName);
+    }
+
 }

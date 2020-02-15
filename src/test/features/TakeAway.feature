@@ -22,7 +22,7 @@ Feature: Restaurant application
     And user can see delivery address details header
     And user enter delivery address "<delivery address>"
     And user enter delivery postal code "<postal code>"
-    And user enter delivery city "<city>"
+    And user enter delivery city "<city>"€ 19,00
     And user enter delivery person name "<person name>"
     And user enter email "<email>"
     And user enter delivery phone number "<phone number>"
@@ -40,8 +40,8 @@ Feature: Restaurant application
     And user can see order success reference number
 
     Examples:
-     | browser| address | restaurant name           | delivery address | city     | postal code | person name | email              | phone number | company name | delivery time       | remarks                          | pay with |
-     |broswer | 8888    | TEST Restaurant Selenium  | main street 2415 | Enschede | 8888AA      | TestUSer    | testuser@test.test | 1234567890   | Takeaway.com | As soon as possible | Leave the order at the reception | € 19,00  |
+      | address | restaurant name          | delivery address | city     | postal code | person name | email              | phone number | company name | delivery time       | remarks                          | pay with |
+      | 8888    | TEST Restaurant Selenium | main street 2415 | Enschede | 8888AA      | TestUSer    | testuser@test.test | 1234567890   | Takeaway.com | As soon as possible | Leave the order at the reception |   |
 
     #Your postcode is invalid or incomplete (a valid and complete postcode should look like this: 1017AB). Check and correct the postcode then try again.
 
@@ -64,20 +64,18 @@ Feature: Restaurant application
     And user can see selected drink details
     And user can see menu total price to pay
     When user select button to add menu to cart
-    Then user can cart total price
+    Then user can see cart total price
     When user select cart order button
     And user is on ready to eat page
     Then as soon as possible delivery time selected "<delivery time>"
     When user select order and pay button
     Then user can see thank you for your order message
-    And user select button to add menu to cart
-    And user can cart total price
-    When user select cart order button
     And user can see copy food tracker link
     And user can see restaurant order from name "<restaurant name>"
+    And user can see ordered meal details
     And user can see order success reference number
 
     Examples:
-     |browser | address | restaurant name          | delivery time       |
-    |browser  | 8888    | TEST Restaurant Selenium | As soon as possible |
+      | address | restaurant name          | delivery time       |
+      | 8888    | TEST Restaurant Selenium | As soon as possible |
 

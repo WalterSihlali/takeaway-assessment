@@ -1,15 +1,17 @@
 package takeAway;
 
+import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.concurrent.TimeUnit;
 
 public class Hooks extends BasePage {
-
 
     @Before
     public void setUp() {
@@ -21,76 +23,85 @@ public class Hooks extends BasePage {
 
         switch (browserName) {
             case "chrome":
-                /**
-                 * Driver setup for google chrome web browser
-                 */
-                String chromeDriverPath = null;
+                try{
+                    /**
+                     * Driver setup for google chrome web browser
+                     */
+                    String chromeDriverPath = null;
 
-                if (this.getOsName().equalsIgnoreCase("Windows")) { chromeDriverPath = windowsDriverLocation + "chromedriver.exe";
-                } else if (this.getOsName().equalsIgnoreCase("Mac OS")) {
-                    chromeDriverPath = macDriverLocation + "chromedriver";
-                } else if (this.getOsName().equalsIgnoreCase("Linux")) {
-                    chromeDriverPath = linuxDriverLocation + "chromedriver";
-                }
-                logger.info("This is the chrome driver path is :::: " + chromeDriverPath);
+                    if (this.getOsName().equalsIgnoreCase("Windows")) { chromeDriverPath = windowsDriverLocation + "chromedriver.exe";
+                    } else if (this.getOsName().equalsIgnoreCase("Mac OS")) {
+                        chromeDriverPath = macDriverLocation + "chromedriver";
+                    } else if (this.getOsName().equalsIgnoreCase("Linux")) {
+                        chromeDriverPath = linuxDriverLocation + "chromedriver";
+                    }
+                    logger.info("This is the chrome driver path is :::: " + chromeDriverPath);
 
-                String absoluteChromeDriverPath = toAbsolutePath(chromeDriverPath);
-                logger.info("This is the chrome driver real path is :::: " + absoluteChromeDriverPath);
+                    String absoluteChromeDriverPath = toAbsolutePath(chromeDriverPath);
+                    logger.info("This is the chrome driver real path is :::: " + absoluteChromeDriverPath);
 
-                System.setProperty("webdriver.chrome.driver", absoluteChromeDriverPath);
-                ChromeOptions options = new ChromeOptions();
-                options.addArguments("test-type");
-                options.addArguments("window-size=1980,1080");
-                options.addArguments("--disable-extensions");
-                options.addArguments("--proxy-server='direct://'");
-                options.addArguments("--proxy-bypass-list=*");
+                    System.setProperty("webdriver.chrome.driver", absoluteChromeDriverPath);
+                    ChromeOptions options = new ChromeOptions();
+                    options.addArguments("test-type");
+                    options.addArguments("window-size=1980,1080");
+                    options.addArguments("--disable-extensions");
+                    options.addArguments("--proxy-server='direct://'");
+                    options.addArguments("--proxy-bypass-list=*");
 
-                if(runInHeadlessMode.equalsIgnoreCase("yes")) {
-                    options.addArguments("--headless");
-                }
-                driver = new ChromeDriver(options);
+                    if(runInHeadlessMode.equalsIgnoreCase("yes")) {
+                        options.addArguments("--headless");
+                    }
+                    driver = new ChromeDriver(options);
 
-                try {
-                    jExecutor = (JavascriptExecutor) driver;
-                    driver.manage().window().maximize();
-                    driverWait = new WebDriverWait(driver, 5);
-                } catch (Exception ex) {
-                    logger.info("The stack trace here happens when I try to maximize the screen");
-                    logger.info(ex.getMessage());
+                    try {
+                        jExecutor = (JavascriptExecutor) driver;
+                        driver.manage().window().maximize();
+                        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+                        driver.manage().timeouts().implicitlyWait(30,TimeUnit.SECONDS);
+                    } catch (Exception ex) {
+                        logger.info("The stack trace here happens when I try to maximize the screen");
+                        logger.info(ex.getMessage());
+                    }
+                }catch (WebDriverException ex) {
+                    logger.info("Unable to instantiate the chrome driver",ex);
                 }
                 break;
 
             case "firefox":
+               try{
+                   /**
+                    * Driver setup for firefox web browser
+                    */
+                   String firefoxDriverPath = null;
+                   logger.info("Firefox ?: " + browserName);
+                   if (this.getOsName().equalsIgnoreCase("Windows")) {
+                       firefoxDriverPath = windowsDriverLocation + "geckodriver.exe";
+                   } else if (this.getOsName().equalsIgnoreCase("Mac OS")) {
+                       firefoxDriverPath = macDriverLocation + "geckodriver";
+                   } else if (this.getOsName().equalsIgnoreCase("Linux")) {
+                       firefoxDriverPath = linuxDriverLocation + "geckodriver";
+                   }
+                   logger.info("This is the firefox driver path is :::: " + firefoxDriverPath);
 
-                /**
-                 * Driver setup for firefox web browser
-                 */
-                String firefoxDriverPath = null;
-                logger.info("Firefox ?: " + browserName);
-                if (this.getOsName().equalsIgnoreCase("Windows")) {
-                    firefoxDriverPath = windowsDriverLocation + "geckodriver.exe";
-                } else if (this.getOsName().equalsIgnoreCase("Mac OS")) {
-                    firefoxDriverPath = macDriverLocation + "geckodriver";
-                } else if (this.getOsName().equalsIgnoreCase("Linux")) {
-                    firefoxDriverPath = linuxDriverLocation + "geckodriver";
-                }
-                logger.info("This is the firefox driver path is :::: " + firefoxDriverPath);
+                   String absoluteFirefoxDriverPath = toAbsolutePath(firefoxDriverPath);
+                   logger.info("This is the chrome driver real path is :::: " + absoluteFirefoxDriverPath);
 
-                String absoluteFirefoxDriverPath = toAbsolutePath(firefoxDriverPath);
-                logger.info("This is the chrome driver real path is :::: " + absoluteFirefoxDriverPath);
+                   System.setProperty("webdriver.gecko.driver", absoluteFirefoxDriverPath);
+                   driver = new FirefoxDriver();
 
-                System.setProperty("webdriver.gecko.driver", absoluteFirefoxDriverPath);
-                driver = new FirefoxDriver();
+                   try {
 
-                try {
-
-                    jExecutor = (JavascriptExecutor) driver;
-                    driver.manage().window().maximize();
-                    driverWait = new WebDriverWait(driver, 5);
-                } catch (Exception ex) {
-                    logger.info("The stack trace here happens when I try to maximize the screen");
-                    logger.info(ex.getMessage());
-                }
+                       jExecutor = (JavascriptExecutor) driver;
+                       driver.manage().window().maximize();
+                       driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+                   } catch (Exception ex) {
+                       logger.info("The stack trace here happens when I try to maximize the screen");
+                       logger.info(ex.getMessage());
+                   }
+               } catch (WebDriverException ex) {
+                   logger.info("Unable to instantiate firefox driver",ex);
+               }
+               break;
         }
     }
 
@@ -98,6 +109,26 @@ public class Hooks extends BasePage {
     public void tearDown() {
         if(driver != null) {
             driver.close();
+        }
+    }
+
+    @After
+    public void tearDown(Scenario scenario) {
+        try {
+            if (driver != null) {
+                logger.info("After features run " + driver);
+                if(scenario.isFailed()) {
+                    try {
+                       captureScreenshot();
+                    } catch (Exception e) {
+                        logger.info(e.getMessage());
+                    }
+                }
+                driver.quit();
+                driver = null;
+            }
+        } catch (WebDriverException ex) {
+            logger.info(ex.getMessage());
         }
     }
 

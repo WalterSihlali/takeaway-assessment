@@ -8,7 +8,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
 public class ParallelExecution extends BasePage {
 
-    OrderMealSteps orderMealSteps = new OrderMealSteps();
+   private OrderMealSteps orderMealSteps = new OrderMealSteps();
+   private String propertyFile = "./src/test/resources/takeaway.properties";
+   private String appURL = getConfigPropertyValue(propertyFile, "url");
+
 
     @BeforeTest
     @Parameters({"browser"})
@@ -105,18 +108,16 @@ public class ParallelExecution extends BasePage {
 
     @Test
     public void parallelTest() {
-        System.out.println("Sample test-method One. Thread id is: ");
-        driver.get("https://www.thuisbezorgd.nl/en/");
+        driver.get(appURL);
         orderMealSteps.user_is_on_take_away_landing_page();
-        orderMealSteps.user_enter_search_for_address("8888");
         orderMealSteps.user_can_see_time_to_order_food_message();
+        orderMealSteps.user_enter_search_for_address(getConfigPropertyValue(propertyFile, "address"));
         orderMealSteps.search_results_popup_is_shown();
-        orderMealSteps.user_select_address_from_search_results("8888");
+        orderMealSteps.user_select_address_from_search_results(getConfigPropertyValue(propertyFile, "address"));
         orderMealSteps.user_is_on_searched_address_page();
         orderMealSteps.user_can_listed_restaurants_list();
         orderMealSteps.user_select_restaurants_from_address_list();
-        orderMealSteps.user_is_on_restaurant_details_page("");
-        orderMealSteps.user_can_see_ordered_meal_details();
+        orderMealSteps.user_is_on_restaurant_details_page(getConfigPropertyValue(propertyFile, "restaurant_name"));
         orderMealSteps.user_select_first_menu_on_the_menu_list();
         orderMealSteps.user_select_menu_drink_selected();
         orderMealSteps.user_can_see_menu_total_price_to_pay();
@@ -125,27 +126,24 @@ public class ParallelExecution extends BasePage {
         orderMealSteps.user_select_cart_order_button();
         orderMealSteps.user_is_on_ready_to_eat_page();
         orderMealSteps.user_can_see_delivery_address_details_header();
-        orderMealSteps.user_enter_search_for_address("add");
-        orderMealSteps.user_enter_delivery_postal_code("co");
-        orderMealSteps.user_enter_delivery_city("ci");
-        orderMealSteps.user_enter_delivery_person_name("nam");
-        orderMealSteps.user_enter_email("em");
-        orderMealSteps.user_enter_delivery_phone_number("ph");
-        orderMealSteps.user_enter_company_name("com");
-        orderMealSteps.user_select_delivery_time("As soon as possible");
-        orderMealSteps.user_enter_delivery_remarks("remark");
+        orderMealSteps.user_enter_delivery_address(getConfigPropertyValue(propertyFile, "delivery_address"));
+        orderMealSteps.user_enter_delivery_postal_code(getConfigPropertyValue(propertyFile, "postal_code"));
+        orderMealSteps.user_enter_delivery_city(getConfigPropertyValue(propertyFile, "city"));
+        orderMealSteps.user_enter_delivery_person_name(getConfigPropertyValue(propertyFile, "person_name"));
+        orderMealSteps.user_enter_email(getConfigPropertyValue(propertyFile, "email"));
+        orderMealSteps.user_enter_delivery_phone_number("phone_number");
+        orderMealSteps.user_enter_company_name("company_name");
+        orderMealSteps.user_select_delivery_time(getConfigPropertyValue(propertyFile, "delivery_time"));
+        orderMealSteps.user_enter_delivery_remarks(getConfigPropertyValue(propertyFile, "remarks"));
         orderMealSteps.user_select_save_delivery_remarks_for_next_order();
-        orderMealSteps.user_select_pay_with_option("pay with");
-
+        orderMealSteps.user_select_pay_with_option("€ 19,00");
         orderMealSteps.user_select_recieve_discounts_loyalty_and_updates();
         orderMealSteps.user_select_order_and_pay_button();
         orderMealSteps.user_can_see_thank_you_for_your_order_message();
         orderMealSteps.user_can_see_copy_food_tracker_link();
-
-        orderMealSteps.user_can_see_restaurant_order_from_name("resta ord");
+        orderMealSteps.user_can_see_restaurant_order_from_name(getConfigPropertyValue(propertyFile, "restaurant_name"));
         orderMealSteps.user_can_see_ordered_meal_details();
         orderMealSteps.user_can_see_payment_success_reference_number();
 
     }
-
 }
