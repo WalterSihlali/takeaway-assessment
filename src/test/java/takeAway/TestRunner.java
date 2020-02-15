@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 @CucumberOptions(
         features = {"src/test/features"},
-        tags = {"@negative-scenario"},
+        tags = {"@regression"},
         format = {"pretty"},
         plugin = {"com.cucumber.listener.ExtentCucumberFormatter:target/cucumber-reports/takeway-report.html"}
         , monochrome = true)

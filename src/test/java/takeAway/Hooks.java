@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,11 +30,12 @@ public class Hooks extends BaseUtilities {
                      */
                     String chromeDriverPath = null;
 
-                    if (this.getOsName().equalsIgnoreCase("Windows")) { chromeDriverPath = windowsDriverLocation + "chromedriver.exe";
+                    if (this.getOsName().equalsIgnoreCase("Windows")) {
+                        chromeDriverPath = macDriverLocation + getConfigPropertyValue(propertyFile, "windows_driver_chrome");
                     } else if (this.getOsName().equalsIgnoreCase("Mac OS")) {
-                        chromeDriverPath = macDriverLocation + "chromedriver";
+                        chromeDriverPath = macDriverLocation + getConfigPropertyValue(propertyFile, "mac_driver_chrome");
                     } else if (this.getOsName().equalsIgnoreCase("Linux")) {
-                        chromeDriverPath = linuxDriverLocation + "chromedriver";
+                        chromeDriverPath = macDriverLocation + getConfigPropertyValue(propertyFile, "linux_driver_chrome");
                     }
                     logger.info("This is the chrome driver path is :::: " + chromeDriverPath);
 
@@ -56,8 +58,8 @@ public class Hooks extends BaseUtilities {
                     try {
                         jExecutor = (JavascriptExecutor) driver;
                         driver.manage().window().maximize();
-                        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
-                        driver.manage().timeouts().implicitlyWait(30,TimeUnit.SECONDS);
+                        driver.manage().timeouts().implicitlyWait(7,TimeUnit.SECONDS);
+                        driverWait = new WebDriverWait(driver, 10);
                     } catch (Exception ex) {
                         logger.info("The stack trace here happens when I try to maximize the screen");
                         logger.info(ex.getMessage());
@@ -75,11 +77,11 @@ public class Hooks extends BaseUtilities {
                    String firefoxDriverPath = null;
                    logger.info("Firefox ?: " + browserName);
                    if (this.getOsName().equalsIgnoreCase("Windows")) {
-                       firefoxDriverPath = windowsDriverLocation + "geckodriver.exe";
+                       firefoxDriverPath = windowsDriverLocation + getConfigPropertyValue(propertyFile, "windows_driver_firefox");;
                    } else if (this.getOsName().equalsIgnoreCase("Mac OS")) {
-                       firefoxDriverPath = macDriverLocation + "geckodriver";
+                       firefoxDriverPath = macDriverLocation + getConfigPropertyValue(propertyFile, "windows_driver_firefox");
                    } else if (this.getOsName().equalsIgnoreCase("Linux")) {
-                       firefoxDriverPath = linuxDriverLocation + "geckodriver";
+                       firefoxDriverPath = linuxDriverLocation + getConfigPropertyValue(propertyFile, "linux_driver_firefox");
                    }
                    logger.info("This is the firefox driver path is :::: " + firefoxDriverPath);
 
@@ -94,6 +96,7 @@ public class Hooks extends BaseUtilities {
                        jExecutor = (JavascriptExecutor) driver;
                        driver.manage().window().maximize();
                        driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+                       driverWait = new WebDriverWait(driver, 10);
                    } catch (Exception ex) {
                        logger.info("The stack trace here happens when I try to maximize the screen");
                        logger.info(ex.getMessage());

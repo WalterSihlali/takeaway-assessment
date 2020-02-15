@@ -31,9 +31,8 @@ public class OrderMealSteps extends BaseUtilities {
     @Then("^user is on takeaway landing page$")
     public void user_is_on_take_away_landing_page() {
         try {
-            secondsDelay(2);
             String landingPageTitle = driver.getTitle();
-            Assert.assertEquals( getConfigPropertyValue(propertyFile, "landing_page_title"),landingPageTitle);
+            Assert.assertEquals( getConfigPropertyValue(propertyFile, "1landing_page_title"),landingPageTitle);
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
         }
@@ -42,7 +41,7 @@ public class OrderMealSteps extends BaseUtilities {
     @And("^user can see time to order food message$")
     public void user_can_see_time_to_order_food_message() {
         try {
-            String message = driver.findElement(By.className(PageObjects.LANDING_PAGE_HEADER)).getText();
+            String message = driver.findElement(By.cssSelector(PageObjects.LANDING_PAGE_HEADER)).getText();
             Assert.assertEquals(message, getConfigPropertyValue(propertyFile, "landing_page_message"));
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
@@ -57,7 +56,6 @@ public class OrderMealSteps extends BaseUtilities {
             highLighterMethod(driver, addressField);
             addressField.clear();
             addressField.sendKeys(address);
-            secondsDelay(5);
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
         }
@@ -79,9 +77,10 @@ public class OrderMealSteps extends BaseUtilities {
     @When("^user search for meal \"([^\"]*)\"$")
     public void user_enter_search_for_meals(String meal) {
         try {
-            waitForElement(By.className(PageObjects.SEARCH_ICON));
-            driver.findElement(By.className(PageObjects.SEARCH_ICON)).click();
-            WebElement addressField = driver.findElement(By.className(PageObjects.SEARCH_MEAL));
+            secondsDelay(1);
+//            driverWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(PageObjects.CATEGORY_MENU)));
+            driver.findElement(By.cssSelector(PageObjects.SEARCH_ICON)).click();
+            WebElement addressField = driver.findElement(By.cssSelector(PageObjects.SEARCH_MEAL));
             highLighterMethod(driver, addressField);
             addressField.clear();
             addressField.sendKeys(meal);
@@ -105,7 +104,7 @@ public class OrderMealSteps extends BaseUtilities {
                 WebElement multipleLocationsMessage = driver.findElement(By.xpath(PageObjects.SEARCH_RESULTS_MULTIPLE_LOCATION));
                 if (multipleLocationsMessage.isDisplayed()) {
                     List<WebElement> addressLocations = driver
-                            .findElement(By.className(PageObjects.POPUP_OPTIONS))
+                            .findElement(By.cssSelector(PageObjects.POPUP_OPTIONS))
                             .findElements(By.xpath(PageObjects.ADDRESS_LOCATIONS));
                     addressLocations.get(0).click();
                 }
@@ -154,9 +153,8 @@ public class OrderMealSteps extends BaseUtilities {
     @Then("^user is on searched address page$")
     public void user_is_on_searched_address_page() {
         try {
-            secondsDelay(2);
-            String pageTitle = driver.getTitle();
-            Assert.assertEquals(pageTitle, getConfigPropertyValue(propertyFile, "order_address_page_title"));
+             int size = driver.findElements(By.cssSelector(PageObjects.ADDRESS_LOCATION_PAGE)).size();
+             Assert.assertEquals(1,size);
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
         }
@@ -165,8 +163,8 @@ public class OrderMealSteps extends BaseUtilities {
     @And("^address restaurants list is shown$")
     public void user_can_listed_restaurants_list() {
         try {
-            waitForElement(By.className(PageObjects.LISTED_RESTAURANTS_NUMBER));
-            String listedRestaurants = driver.findElement(By.className(PageObjects.LISTED_RESTAURANTS_NUMBER)).getText();
+            waitForElement(By.cssSelector(PageObjects.LISTED_RESTAURANTS_NUMBER));
+            String listedRestaurants = driver.findElement(By.cssSelector(PageObjects.LISTED_RESTAURANTS_NUMBER)).getText();
             int numberOfRestaurants = Integer.parseInt(listedRestaurants);
             Assert.assertTrue(numberOfRestaurants > 0);
         } catch (NoSuchElementException ex) {
@@ -202,6 +200,7 @@ public class OrderMealSteps extends BaseUtilities {
     @Then("^user is on restaurant \"([^\"]*)\" details page$")
     public void user_is_on_restaurant_details_page(String restaurantName) {
         try {
+            secondsDelay(1);
             String name = driver.findElement(By.className(PageObjects.RESTAURANT_NAME)).getText();
             Assert.assertEquals(name, restaurantName.trim());
         } catch (NoSuchElementException ex) {
@@ -221,7 +220,6 @@ public class OrderMealSteps extends BaseUtilities {
     @Then("^user can see selected drink details$")
     public void user_select_menu_drink_selected() {
         try {
-            secondsDelay(2);
             Select select = new Select(driver.findElement(By.name(PageObjects.SELECTED_DRINK)));
             WebElement option = select.getFirstSelectedOption();
             selectedDrink = option.getText();
@@ -233,7 +231,7 @@ public class OrderMealSteps extends BaseUtilities {
     @When("^user select cart order button$")
     public void user_select_cart_order_button() {
         try {
-            driver.findElement(By.className(PageObjects.CART_ORDER_BUTTON)).click();
+            driver.findElement(By.cssSelector(PageObjects.CART_ORDER_BUTTON)).click();
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
         }
@@ -242,10 +240,9 @@ public class OrderMealSteps extends BaseUtilities {
     @Then("^meal for purchase details are shown$")
     public void menu_details_are_shown() {
         try {
-            waitForElement(By.className(PageObjects.MEAL_NAME));
-            secondsDelay(1);
-            mealName = driver.findElement(By.className(PageObjects.MEAL_NAME)).getText();
-            String  mealPrice = driver.findElement(By.className(PageObjects.MEAL_PRICE)).getText();
+            waitForElement(By.xpath(PageObjects.MEAL_NAME));
+            mealName = driver.findElement(By.xpath(PageObjects.MEAL_NAME)).getText();
+            String  mealPrice = driver.findElement(By.cssSelector(PageObjects.MEAL_PRICE)).getText();
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
         }
@@ -254,9 +251,8 @@ public class OrderMealSteps extends BaseUtilities {
     @Then("^user can see menu total price to pay$")
     public void user_can_see_menu_total_price_to_pay() {
         try {
-            waitForElement(By.className(PageObjects.MEAL_PRICE_BUTTON));
-            secondsDelay(1);
-            String totalPrice = driver.findElement(By.className(PageObjects.MEAL_PRICE_BUTTON)).getText().replace("Add", "").trim();
+            waitForElement(By.cssSelector(PageObjects.MEAL_PRICE_BUTTON));
+            String totalPrice = driver.findElement(By.cssSelector(PageObjects.MEAL_PRICE_BUTTON)).getText().replace("Add", "").trim();
             String currence = totalPrice.substring(0, 1);
             Assert.assertEquals(currence, "€");
             menuPrice = totalPrice;
@@ -270,8 +266,9 @@ public class OrderMealSteps extends BaseUtilities {
     @Then("^user can see cart total price$")
     public void user_can_see_cart_total_price() {
         try {
-            waitForElement(By.className(PageObjects.CART_TOTAL));
-            String cartTotal = driver.findElement(By.className(PageObjects.CART_TOTAL)).getText();
+            secondsDelay(2);
+            waitForElement(By.cssSelector(PageObjects.CART_TOTAL));
+            String cartTotal = driver.findElement(By.cssSelector(PageObjects.CART_TOTAL)).getText();
             Assert.assertEquals(menuPrice, cartTotal);
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
@@ -283,7 +280,7 @@ public class OrderMealSteps extends BaseUtilities {
     @Then("^user is on ready to eat page$")
     public void user_is_on_ready_to_eat_page() {
         try {
-            boolean isDisplayed = driver.findElement(By.className(PageObjects.ON_READY_TO_EAT_PAGE)).isDisplayed();
+            boolean isDisplayed = driver.findElement(By.cssSelector(PageObjects.ON_READY_TO_EAT_PAGE)).isDisplayed();
             Assert.assertTrue(isDisplayed);
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
@@ -293,8 +290,8 @@ public class OrderMealSteps extends BaseUtilities {
     @And("^user select button to add menu to cart$")
     public void user_select_button_to_add_menu_to_cart() {
         try {
-            secondsDelay(3);
-            driver.findElement(By.className(PageObjects.MEAL_PRICE_BUTTON)).click();
+             secondsDelay(1);
+            driver.findElement(By.cssSelector(PageObjects.MEAL_PRICE_BUTTON)).click();
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
         }
@@ -303,7 +300,7 @@ public class OrderMealSteps extends BaseUtilities {
     @And("^user can see delivery address details header$")
     public void user_can_see_delivery_address_details_header() {
         try {
-            int size = driver.findElements(By.className(PageObjects.ON_DELIVERY_PAGE)).size();
+            int size = driver.findElements(By.cssSelector(PageObjects.ON_DELIVERY_PAGE)).size();
             Assert.assertEquals(1, size);
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
@@ -450,7 +447,7 @@ public class OrderMealSteps extends BaseUtilities {
     @And("^user select order and pay button$")
     public void user_select_order_and_pay_button() {
         try {
-            driver.findElement(By.className(PageObjects.ORDER_AND_PAY_BUTTON)).click();
+            driver.findElement(By.cssSelector(PageObjects.ORDER_AND_PAY_BUTTON)).click();
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
         }
@@ -459,8 +456,7 @@ public class OrderMealSteps extends BaseUtilities {
     @Then("^user can see thank you for your order message$")
     public void user_can_see_thank_you_for_your_order_message() {
         try {
-            secondsDelay(5);
-            int size = driver.findElements(By.className(PageObjects.THANK_YOU_WE_RECIEVED_ORDER)).size();
+            int size = driver.findElements(By.cssSelector(PageObjects.THANK_YOU_WE_RECEIVED_ORDER)).size();
             Assert.assertEquals(1, size);
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
@@ -471,7 +467,7 @@ public class OrderMealSteps extends BaseUtilities {
     @And("^user can see copy food tracker link$")
     public void user_can_see_copy_food_tracker_link() {
         try {
-            boolean isDisplayed = driver.findElement(By.className(PageObjects.COPY_FOOD_TRACKER_LINK)).isDisplayed();
+            boolean isDisplayed = driver.findElement(By.cssSelector(PageObjects.COPY_FOOD_TRACKER_LINK)).isDisplayed();
             Assert.assertTrue(isDisplayed);
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
@@ -481,7 +477,7 @@ public class OrderMealSteps extends BaseUtilities {
     @And("^user can see restaurant order from name \"([^\"]*)\"$")
     public void user_can_see_restaurant_order_from_name(String restaurantName) {
         try {
-            String name = driver.findElement(By.className(PageObjects.ORDER_RESTAURANT)).getText();
+            String name = driver.findElement(By.cssSelector(PageObjects.ORDER_RESTAURANT)).getText();
             Assert.assertEquals(name, restaurantName);
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
@@ -491,12 +487,9 @@ public class OrderMealSteps extends BaseUtilities {
     @And("^user can see ordered meal details$")
     public void user_can_see_ordered_meal_details() {
         try {
-            secondsDelay(1);
-            scrollToElement(driver.findElement(By.className(PageObjects.SUCCESS_ORDER_MENU_NAME)));
-            String orderedMealName = driver.findElement(By.className(PageObjects.SUCCESS_ORDER_MENU_NAME)).getText();
-            String orderedDrinkName = driver.findElement(By.className(PageObjects.SUCCESS_ORDER_MENU_SIDES)).getText();
-            secondsDelay(2);
-            Assert.assertEquals(orderedMealName, mealName);
+            String orderedMealName = driver.findElement(By.cssSelector(PageObjects.SUCCESS_ORDER_MENU_NAME)).getText();
+            String orderedDrinkName = driver.findElement(By.cssSelector(PageObjects.SUCCESS_ORDER_MENU_SIDES)).getText();
+            Assert.assertEquals(mealName,orderedMealName );
             Assert.assertTrue(selectedDrink.contains(orderedDrinkName));
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);
@@ -507,7 +500,7 @@ public class OrderMealSteps extends BaseUtilities {
     @Then("^user can see order success reference number$")
     public void user_can_see_payment_success_reference_number() {
         try {
-            String referenceNumber = driver.findElement(By.className(PageObjects.SUCCESS_ORDER_REFERENCE)).getText();
+            String referenceNumber = driver.findElement(By.cssSelector(PageObjects.SUCCESS_ORDER_REFERENCE)).getText();
             logger.info("Order reference number is : " + referenceNumber);
         } catch (NoSuchElementException ex) {
             logger.info("Element not found",ex);

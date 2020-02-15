@@ -1,6 +1,6 @@
 Feature: As a user I want to be able to order a meal from my favourite restaurant near my location on takeaway.com
 
-  @positive-scenario @order-meal
+#  @regression @positive-scenario
   Scenario Outline: Order food from takeway.com
     Given user launch takeaway web application
     Then user is on takeaway landing page
@@ -49,7 +49,7 @@ Feature: As a user I want to be able to order a meal from my favourite restauran
 
  # defetc as data not being save when use come to re-order
 
-  @positive-scenario @re-order-meal
+  @regression @positive-scenario
   Scenario Outline: Re-order food from takeway.com
     Given user launch takeaway web application
     Then user is on takeaway landing page
@@ -58,9 +58,13 @@ Feature: As a user I want to be able to order a meal from my favourite restauran
     Then search results popup is shown
     When user select address "<address>" from search results
     Then user is on searched address page
-    And address restaurants list is shown
+    When user search for restaurant "<restaurant name>"
+    Then address restaurants list is shown
     When user select restaurant listed under address
     Then user is on restaurant "<restaurant name>" details page
+    When user search for meal "<meal name>"
+    And meal for purchase details are shown
+    When user select first menu on the menu list
     When user select first menu on the menu list
     Then meal for purchase details are shown
     And user can see selected drink details
@@ -78,11 +82,11 @@ Feature: As a user I want to be able to order a meal from my favourite restauran
     And user can see order success reference number
 
     Examples:
-      | address | restaurant name          | delivery time       |
-      | 8888    | TEST Restaurant Selenium | As soon as possible |
+      | address | restaurant name          |meal name| delivery time       |
+      | 8888    | TEST Restaurant Selenium | Duck Breas        |As soon as possible |
 
 
-  @negative-scenario @restaurant-not_found
+#  @regression @negative-scenario
   Scenario Outline: Search for restaurant not near address
     Given user launch takeaway web application
     Then user is on takeaway landing page
@@ -99,7 +103,7 @@ Feature: As a user I want to be able to order a meal from my favourite restauran
       | address | restaurant name |
       | 8888    | Roccomamas      |
 
-  @negative-scenario @address-not-found
+#  @regression @negative-scenario
   Scenario Outline: Search for address not in takeaway regions
     Given user launch takeaway web application
     Then user is on takeaway landing page

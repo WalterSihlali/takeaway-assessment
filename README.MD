@@ -10,5 +10,6 @@ This is a Maven java project for automation of order meal scenarios on Takeaway.
 ## Parallel execution tests
 - For running the parallel cross browser tests launch project on oyur IDE and recling on the parallel.xml file and run with testng
 ## Test Reports
-- Test reports located under the ./reports directory on the root of the project
+- First / Latest report will be located under ./target/cucumber-reports
+- Existing test reports will be moved to ./reports directory when a new one is generated
 - Screenshot for fail test steps will be under the .reports/screenshots directory

@@ -113,6 +113,9 @@ public class BaseUtilities {
     }
 
 
+    /**
+     * Wait until element is visible
+     */
     public void waitForElement(By selector) {
         try {
             WebDriverWait wait = new WebDriverWait(driver, 15);
@@ -122,27 +125,37 @@ public class BaseUtilities {
         }
     }
 
+    /**
+     * Get time stamp
+     */
     public static String returnDateTimeStamp(String fileExtension) {
         Date date = new Date();
         return date.toString().replace(":", "_").replace(" ", "_") + fileExtension;
     }
 
+    /**
+     * Take screenshot of a web page and save it
+     */
     public void captureScreenshot() {
         try {
             File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-            screenshotName = returnDateTimeStamp(".jpg");
+            screenshotName = returnDateTimeStamp(".png");
             FileUtils.copyFile(srcFile, new File(System.getProperty("user.dir") + "/reports/screenshots/" + screenshotName));
             Reporter.addStepLog("Taking a screenshot!");
             Reporter.addStepLog("<br>");
-            Reporter.addStepLog("<a target=\"_blank\", href=" + returnScreenshotName() + "><img src=" + returnScreenshotName() + " height=200 width=300></img></a>");
+            Reporter.addStepLog("<a target=\"_blank\", href=" + returnScreenshotName() + "><img src=" + returnScreenshotName() + " height=100 width=00></img></a>");
         } catch (IOException ex) {
             logger.info("File is not found on the given path ",ex);
         }
+
     }
 
 
+    /**
+     * Take get saved web screenshot
+     */
     public static String returnScreenshotName() {
-        return (System.getProperty("user.dir") + "/reports/screenshot/" + screenshotName);
+        return (System.getProperty("user.dir") + "reports/screenshot/" + screenshotName);
     }
 
 }
