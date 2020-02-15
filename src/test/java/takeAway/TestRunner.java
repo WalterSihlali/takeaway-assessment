@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 
 @CucumberOptions(
         features = {"src/test/features"},
+        tags = {"@negative-scenario"},
         format = {"pretty"},
         plugin = {"com.cucumber.listener.ExtentCucumberFormatter:target/cucumber-reports/takeway-report.html"}
         , monochrome = true)
@@ -34,7 +35,7 @@ public class TestRunner {
     /**
      * Copy report file from target to reports folder
      */
-    private static void copyFileUsingStream(File source, File dest) throws IOException {
+    private static void copyFileUsingStream(File source, File dest) throws IOException{
         InputStream inputStream = null;
         OutputStream outputStream = null;
 
@@ -47,14 +48,10 @@ public class TestRunner {
             while ((length = inputStream.read(buffer)) > 0) {
                 outputStream.write(buffer, 0, length);
             }
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
 
-            if (outputStream != null) {
+        } finally{
+                inputStream.close();
                 outputStream.close();
-            }
         }
     }
 

@@ -496,7 +496,6 @@ public class OrderMealSteps extends BaseUtilities {
             String orderedMealName = driver.findElement(By.className(PageObjects.SUCCESS_ORDER_MENU_NAME)).getText();
             String orderedDrinkName = driver.findElement(By.className(PageObjects.SUCCESS_ORDER_MENU_SIDES)).getText();
             secondsDelay(2);
-
             Assert.assertEquals(orderedMealName, mealName);
             Assert.assertTrue(selectedDrink.contains(orderedDrinkName));
         } catch (NoSuchElementException ex) {

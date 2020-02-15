@@ -44,8 +44,8 @@ Feature: As a user I want to be able to order a meal from my favourite restauran
     And user can see order success reference number
 
     Examples:
-      | address | restaurant name          |meal name| delivery address | city     | postal code | person name | email              | phone number | company name | delivery time       | remarks                          | pay with |
-      | 8888    | TEST Restaurant Selenium |Duck Breast |main street 2415 | Enschede | 8888AA      | TestUSer    | testuser@test.test | 1234567890   | Takeaway.com | As soon as possible | Leave the order at the reception |€ 19,00   |
+      | address | restaurant name          | meal name   | delivery address | city     | postal code | person name | email              | phone number | company name | delivery time       | remarks                          | pay with |
+      | 8888    | TEST Restaurant Selenium | Duck Breast | main street 2415 | Enschede | 8888AA      | TestUSer    | testuser@test.test | 1234567890   | Takeaway.com | As soon as possible | Leave the order at the reception | € 19,00  |
 
  # defetc as data not being save when use come to re-order
 
@@ -96,11 +96,11 @@ Feature: As a user I want to be able to order a meal from my favourite restauran
     Then searched restaurants not found
 
     Examples:
-      | address | restaurant name          |
-      | 8888    | Roccomamas               |
+      | address | restaurant name |
+      | 8888    | Roccomamas      |
 
   @negative-scenario @address-not-found
-  Scenario Outline: Search for address not in Europe
+  Scenario Outline: Search for address not in takeaway regions
     Given user launch takeaway web application
     Then user is on takeaway landing page
     And user can see time to order food message
@@ -110,6 +110,6 @@ Feature: As a user I want to be able to order a meal from my favourite restauran
 
     Examples:
       | address |
-      | 2194   |
+      | 2194    |
 
 
