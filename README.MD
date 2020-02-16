@@ -7,6 +7,7 @@ This is a Maven java project for automation of order meal scenarios on Takeaway.
 - cd to pom.xml folder
 ## Running the automated tests
 - mvn clean test
+- To run test in headless mode - takeaway.properties headless=yes
 ## Parallel execution tests
 - For running the parallel cross browser tests launch project in your IDE and right click on the parallel.xml file and run with testng
 ## Test Reports
