@@ -27,7 +27,7 @@ public class TestRunner {
 
     @AfterClass
     public static void writeExtentReport() throws IOException {
-        Reporter.loadXMLConfig(new File(System.getProperty("user.dir")+ "/extent-config.xml"));
+        Reporter.loadXMLConfig(new File(System.getProperty("user.dir") + "/extent-config.xml"));
         copyLatestExtentReport();
         Reporter.loadXMLConfig("extent-config.xml");
     }
@@ -35,7 +35,7 @@ public class TestRunner {
     /**
      * Copy report file from target to reports folder
      */
-    private static void copyFileUsingStream(File source, File dest) throws IOException{
+    private static void copyFileUsingStream(File source, File dest) throws IOException {
         InputStream inputStream = null;
         OutputStream outputStream = null;
 
@@ -49,20 +49,19 @@ public class TestRunner {
                 outputStream.write(buffer, 0, length);
             }
 
-        } finally{
-                inputStream.close();
-                outputStream.close();
+        } finally {
+            inputStream.close();
+            outputStream.close();
         }
     }
 
-        /**
-         * Add time stamp to current report when new one is generated
-         * Copy report file from target to reports folder
-         */
+    /**
+     * Add time stamp to current report when new one is generated
+     * Copy report file from target to reports folder
+     */
     public static void copyLatestExtentReport() throws IOException {
         String timestamp = new SimpleDateFormat("yyyy:MM:dd_HH:mm:ss").format(Calendar.getInstance().getTime()).replaceAll(":", "-");
         File source = new File(System.getProperty("user.dir") + "/target/cucumber-reports/takeway-report.html");
-
         File file = new File(System.getProperty("user.dir") + "/reports");
         if(!file.exists()) {
             try {
@@ -71,8 +70,7 @@ public class TestRunner {
                 logger.info( ex.getLocalizedMessage());
             }
         }
-
-        File destination = new File(System.getProperty("user.dir") + "/reports/takeway-report"+ timestamp + ".html");
+        File destination = new File(System.getProperty("user.dir") + "/reports/takeway-report" + timestamp + ".html");
         copyFileUsingStream(source, destination);
     }
 

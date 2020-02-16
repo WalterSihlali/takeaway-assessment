@@ -1,6 +1,6 @@
 Feature: As a user I want to be able to order a meal from my favourite restaurant near my location on takeaway.com
 
-#  @regression @positive-scenario
+  @regression @positive-scenario
   Scenario Outline: Order food from takeway.com
     Given user launch takeaway web application
     Then user is on takeaway landing page
@@ -63,8 +63,6 @@ Feature: As a user I want to be able to order a meal from my favourite restauran
     When user select restaurant listed under address
     Then user is on restaurant "<restaurant name>" details page
     When user search for meal "<meal name>"
-    And meal for purchase details are shown
-    When user select first menu on the menu list
     When user select first menu on the menu list
     Then meal for purchase details are shown
     And user can see selected drink details
@@ -86,7 +84,7 @@ Feature: As a user I want to be able to order a meal from my favourite restauran
       | 8888    | TEST Restaurant Selenium | Duck Breas        |As soon as possible |
 
 
-#  @regression @negative-scenario
+  @regression @negative-scenario
   Scenario Outline: Search for restaurant not near address
     Given user launch takeaway web application
     Then user is on takeaway landing page
@@ -103,7 +101,7 @@ Feature: As a user I want to be able to order a meal from my favourite restauran
       | address | restaurant name |
       | 8888    | Roccomamas      |
 
-#  @regression @negative-scenario
+  @regression @negative-scenario
   Scenario Outline: Search for address not in takeaway regions
     Given user launch takeaway web application
     Then user is on takeaway landing page

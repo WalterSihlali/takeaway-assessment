@@ -6,17 +6,19 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
+
 public class ParallelExecution extends BaseUtilities {
 
-   private OrderMealSteps orderMealSteps = new OrderMealSteps();
-   private String propertyFile = "./src/test/resources/takeaway.properties";
-   private String appURL = getConfigPropertyValue(propertyFile, "url");
+    private OrderMealSteps orderMealSteps = new OrderMealSteps();
+    private String propertyFile = "./src/test/resources/takeaway.properties";
+    private String appURL = getConfigPropertyValue(propertyFile, "url");
 
 
-    @BeforeTest
     @Parameters({"browser"})
+    @BeforeTest
     public void before(String browser) {
-        String macDriverLocation = getConfigPropertyValue(propertyFile, "mac_driver_location");;
+        String macDriverLocation = getConfigPropertyValue(propertyFile, "mac_driver_location");
+        ;
         String linuxDriverLocation = getConfigPropertyValue(propertyFile, "linux_driver_location");
         String windowsDriverLocation = getConfigPropertyValue(propertyFile, "windows_driver_location");
         String runInHeadlessMode = getConfigPropertyValue(propertyFile, "headless");
@@ -71,7 +73,8 @@ public class ParallelExecution extends BaseUtilities {
                 String firefoxDriverPath = null;
                 logger.info("Firefox ?: " + browser);
                 if (this.getOsName().equalsIgnoreCase("Windows")) {
-                    firefoxDriverPath = windowsDriverLocation + getConfigPropertyValue(propertyFile, "windows_driver_firefox");;
+                    firefoxDriverPath = windowsDriverLocation + getConfigPropertyValue(propertyFile, "windows_driver_firefox");
+                    ;
                 } else if (this.getOsName().equalsIgnoreCase("Mac OS")) {
                     firefoxDriverPath = macDriverLocation + getConfigPropertyValue(propertyFile, "mac_driver_firefox");
                 } else if (this.getOsName().equalsIgnoreCase("Linux")) {
@@ -97,7 +100,7 @@ public class ParallelExecution extends BaseUtilities {
         }
     }
 
-    @AfterSuite
+    @AfterClass
     public void after() {
         if (driver != null) {
             driver.quit();
@@ -105,9 +108,12 @@ public class ParallelExecution extends BaseUtilities {
         }
     }
 
-    @Test
-    public void parallelTest() {
+@Test(threadPoolSize = 2, invocationCount = 2,  timeOut = 10000)
+public void parallelChromeTest() {
+
         driver.get(appURL);
+        System.out.println("Test Case One with Thread Id:- "
+                + Thread.currentThread().getId());
         orderMealSteps.user_is_on_take_away_landing_page();
         orderMealSteps.user_can_see_time_to_order_food_message();
         orderMealSteps.user_enter_search_for_address(getConfigPropertyValue(propertyFile, "address"));

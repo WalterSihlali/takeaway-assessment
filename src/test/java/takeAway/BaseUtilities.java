@@ -112,7 +112,6 @@ public class BaseUtilities {
         js.executeScript("arguments[0].scrollIntoView()", element);
     }
 
-
     /**
      * Wait until element is visible
      */
@@ -145,11 +144,10 @@ public class BaseUtilities {
             Reporter.addStepLog("<br>");
             Reporter.addStepLog("<a target=\"_blank\", href=" + returnScreenshotName() + "><img src=" + returnScreenshotName() + " height=100 width=00></img></a>");
         } catch (IOException ex) {
-            logger.info("File is not found on the given path ",ex);
+            logger.info("File is not found on the given path ", ex);
         }
 
     }
-
 
     /**
      * Take get saved web screenshot

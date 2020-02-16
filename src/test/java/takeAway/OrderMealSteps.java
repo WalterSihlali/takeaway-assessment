@@ -32,9 +32,9 @@ public class OrderMealSteps extends BaseUtilities {
     public void user_is_on_take_away_landing_page() {
         try {
             String landingPageTitle = driver.getTitle();
-            Assert.assertEquals( getConfigPropertyValue(propertyFile, "1landing_page_title"),landingPageTitle);
+            Assert.assertEquals(getConfigPropertyValue(propertyFile, "landing_page_title"), landingPageTitle);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -44,7 +44,7 @@ public class OrderMealSteps extends BaseUtilities {
             String message = driver.findElement(By.cssSelector(PageObjects.LANDING_PAGE_HEADER)).getText();
             Assert.assertEquals(message, getConfigPropertyValue(propertyFile, "landing_page_message"));
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -57,7 +57,7 @@ public class OrderMealSteps extends BaseUtilities {
             addressField.clear();
             addressField.sendKeys(address);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -70,7 +70,7 @@ public class OrderMealSteps extends BaseUtilities {
             addressField.clear();
             addressField.sendKeys(restaurant);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -78,14 +78,13 @@ public class OrderMealSteps extends BaseUtilities {
     public void user_enter_search_for_meals(String meal) {
         try {
             secondsDelay(1);
-//            driverWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(PageObjects.CATEGORY_MENU)));
             driver.findElement(By.cssSelector(PageObjects.SEARCH_ICON)).click();
             WebElement addressField = driver.findElement(By.cssSelector(PageObjects.SEARCH_MEAL));
             highLighterMethod(driver, addressField);
             addressField.clear();
             addressField.sendKeys(meal);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -111,9 +110,9 @@ public class OrderMealSteps extends BaseUtilities {
             }
 
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         } catch (NoAlertPresentException ex) {
-            logger.info("No alert found on the page",ex);
+            logger.info("No alert found on the page", ex);
         }
     }
 
@@ -121,12 +120,13 @@ public class OrderMealSteps extends BaseUtilities {
     @Then("^search results popup is shown$")
     public void search_results_popup_is_shown() {
         try {
+            secondsDelay(2);
             int size = driver.findElements(By.xpath(PageObjects.ADDRESS_SUGGESTION)).size();
             Assert.assertEquals(1, size);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         } catch (NoAlertPresentException ex) {
-            logger.info("No alert found on the page",ex);
+            logger.info("No alert found on the page", ex);
         }
     }
 
@@ -134,9 +134,9 @@ public class OrderMealSteps extends BaseUtilities {
     public void user_select_show_address_button() {
         try {
             waitForElement(By.id(PageObjects.SHOW_DDRESS_RESULTS));
-           driver.findElement(By.id(PageObjects.SHOW_DDRESS_RESULTS)).click();
+            driver.findElement(By.id(PageObjects.SHOW_DDRESS_RESULTS)).click();
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -147,16 +147,17 @@ public class OrderMealSteps extends BaseUtilities {
             int size = driver.findElements(By.id(PageObjects.ADDRESS_ERROR)).size();
             Assert.assertEquals(1, size);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
+
     @Then("^user is on searched address page$")
     public void user_is_on_searched_address_page() {
         try {
-             int size = driver.findElements(By.cssSelector(PageObjects.ADDRESS_LOCATION_PAGE)).size();
-             Assert.assertEquals(1,size);
+            int size = driver.findElements(By.cssSelector(PageObjects.ADDRESS_LOCATION_PAGE)).size();
+            Assert.assertEquals(1, size);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -168,9 +169,9 @@ public class OrderMealSteps extends BaseUtilities {
             int numberOfRestaurants = Integer.parseInt(listedRestaurants);
             Assert.assertTrue(numberOfRestaurants > 0);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         } catch (TimeoutException ex) {
-            logger.info("Timed out waiting for the element",ex);
+            logger.info("Timed out waiting for the element", ex);
         }
     }
 
@@ -179,11 +180,11 @@ public class OrderMealSteps extends BaseUtilities {
         try {
             waitForElement(By.id(PageObjects.SEARCH_RESTAURANT_NOT_FOUND));
             int size = driver.findElements(By.id(PageObjects.SEARCH_RESTAURANT_NOT_FOUND)).size();
-            Assert.assertEquals(1,size);
+            Assert.assertEquals(1, size);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         } catch (TimeoutException ex) {
-            logger.info("Timed out waiting for the element",ex);
+            logger.info("Timed out waiting for the element", ex);
         }
     }
 
@@ -193,7 +194,7 @@ public class OrderMealSteps extends BaseUtilities {
             waitForElement(By.id(PageObjects.RESTAURANT_FROM_LIST));
             driver.findElement(By.id(PageObjects.RESTAURANT_FROM_LIST)).click();
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -204,7 +205,7 @@ public class OrderMealSteps extends BaseUtilities {
             String name = driver.findElement(By.className(PageObjects.RESTAURANT_NAME)).getText();
             Assert.assertEquals(name, restaurantName.trim());
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -213,18 +214,19 @@ public class OrderMealSteps extends BaseUtilities {
         try {
             driver.findElement(By.id(PageObjects.RESTAURANT_MENU_ITEM)).click();
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
     @Then("^user can see selected drink details$")
     public void user_select_menu_drink_selected() {
         try {
+            secondsDelay(2);
             Select select = new Select(driver.findElement(By.name(PageObjects.SELECTED_DRINK)));
             WebElement option = select.getFirstSelectedOption();
             selectedDrink = option.getText();
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -233,7 +235,7 @@ public class OrderMealSteps extends BaseUtilities {
         try {
             driver.findElement(By.cssSelector(PageObjects.CART_ORDER_BUTTON)).click();
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -242,9 +244,9 @@ public class OrderMealSteps extends BaseUtilities {
         try {
             waitForElement(By.xpath(PageObjects.MEAL_NAME));
             mealName = driver.findElement(By.xpath(PageObjects.MEAL_NAME)).getText();
-            String  mealPrice = driver.findElement(By.cssSelector(PageObjects.MEAL_PRICE)).getText();
+            String mealPrice = driver.findElement(By.cssSelector(PageObjects.MEAL_PRICE)).getText();
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -257,9 +259,9 @@ public class OrderMealSteps extends BaseUtilities {
             Assert.assertEquals(currence, "€");
             menuPrice = totalPrice;
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         } catch (TimeoutException ex) {
-            logger.info("Timed out waiting for element",ex);
+            logger.info("Timed out waiting for element", ex);
         }
     }
 
@@ -271,9 +273,9 @@ public class OrderMealSteps extends BaseUtilities {
             String cartTotal = driver.findElement(By.cssSelector(PageObjects.CART_TOTAL)).getText();
             Assert.assertEquals(menuPrice, cartTotal);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         } catch (TimeoutException ex) {
-            logger.info("Timed out waiting for element",ex);
+            logger.info("Timed out waiting for element", ex);
         }
     }
 
@@ -283,17 +285,17 @@ public class OrderMealSteps extends BaseUtilities {
             boolean isDisplayed = driver.findElement(By.cssSelector(PageObjects.ON_READY_TO_EAT_PAGE)).isDisplayed();
             Assert.assertTrue(isDisplayed);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
     @And("^user select button to add menu to cart$")
     public void user_select_button_to_add_menu_to_cart() {
         try {
-             secondsDelay(1);
+            secondsDelay(1);
             driver.findElement(By.cssSelector(PageObjects.MEAL_PRICE_BUTTON)).click();
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -303,7 +305,7 @@ public class OrderMealSteps extends BaseUtilities {
             int size = driver.findElements(By.cssSelector(PageObjects.ON_DELIVERY_PAGE)).size();
             Assert.assertEquals(1, size);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -315,7 +317,7 @@ public class OrderMealSteps extends BaseUtilities {
             addressEditText.clear();
             addressEditText.sendKeys(deliveryAddress);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -328,7 +330,7 @@ public class OrderMealSteps extends BaseUtilities {
             postalCodeEditText.clear();
             postalCodeEditText.sendKeys(postalCode);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -340,7 +342,7 @@ public class OrderMealSteps extends BaseUtilities {
             cityEditText.clear();
             cityEditText.sendKeys(city);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -352,7 +354,7 @@ public class OrderMealSteps extends BaseUtilities {
             nameEditText.clear();
             nameEditText.sendKeys(personName);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -364,7 +366,7 @@ public class OrderMealSteps extends BaseUtilities {
             emailEditText.clear();
             emailEditText.sendKeys(email);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -376,7 +378,7 @@ public class OrderMealSteps extends BaseUtilities {
             phoneEditText.clear();
             phoneEditText.sendKeys(phoneNumber);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -388,7 +390,7 @@ public class OrderMealSteps extends BaseUtilities {
             companyEditText.clear();
             companyEditText.sendKeys(companyName);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -399,7 +401,7 @@ public class OrderMealSteps extends BaseUtilities {
             dropDown.selectByVisibleText(expectedDeliveryTime);
 
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -411,7 +413,7 @@ public class OrderMealSteps extends BaseUtilities {
             remarksTextArea.clear();
             remarksTextArea.sendKeys(remarks);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -420,7 +422,7 @@ public class OrderMealSteps extends BaseUtilities {
         try {
             driver.findElement(By.id(PageObjects.SAVE_DELIVERY_REMARKS)).click();
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -431,7 +433,7 @@ public class OrderMealSteps extends BaseUtilities {
             Select dropDown = new Select(driver.findElement(By.id(PageObjects.PAY_WITH)));
             dropDown.selectByVisibleText(payWith);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -440,7 +442,7 @@ public class OrderMealSteps extends BaseUtilities {
         try {
             driver.findElement(By.id(PageObjects.NEWS_LETTER_CHECKBOX)).click();
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -449,7 +451,7 @@ public class OrderMealSteps extends BaseUtilities {
         try {
             driver.findElement(By.cssSelector(PageObjects.ORDER_AND_PAY_BUTTON)).click();
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -459,7 +461,7 @@ public class OrderMealSteps extends BaseUtilities {
             int size = driver.findElements(By.cssSelector(PageObjects.THANK_YOU_WE_RECEIVED_ORDER)).size();
             Assert.assertEquals(1, size);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -470,7 +472,7 @@ public class OrderMealSteps extends BaseUtilities {
             boolean isDisplayed = driver.findElement(By.cssSelector(PageObjects.COPY_FOOD_TRACKER_LINK)).isDisplayed();
             Assert.assertTrue(isDisplayed);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -480,7 +482,7 @@ public class OrderMealSteps extends BaseUtilities {
             String name = driver.findElement(By.cssSelector(PageObjects.ORDER_RESTAURANT)).getText();
             Assert.assertEquals(name, restaurantName);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 
@@ -489,10 +491,10 @@ public class OrderMealSteps extends BaseUtilities {
         try {
             String orderedMealName = driver.findElement(By.cssSelector(PageObjects.SUCCESS_ORDER_MENU_NAME)).getText();
             String orderedDrinkName = driver.findElement(By.cssSelector(PageObjects.SUCCESS_ORDER_MENU_SIDES)).getText();
-            Assert.assertEquals(mealName,orderedMealName );
+            Assert.assertEquals(mealName, orderedMealName);
             Assert.assertTrue(selectedDrink.contains(orderedDrinkName));
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
 
     }
@@ -503,7 +505,7 @@ public class OrderMealSteps extends BaseUtilities {
             String referenceNumber = driver.findElement(By.cssSelector(PageObjects.SUCCESS_ORDER_REFERENCE)).getText();
             logger.info("Order reference number is : " + referenceNumber);
         } catch (NoSuchElementException ex) {
-            logger.info("Element not found",ex);
+            logger.info("Element not found", ex);
         }
     }
 }
