@@ -9,7 +9,7 @@ This is a Maven java project for automation of order meal scenarios on Takeaway.
 - mvn clean test
 - To run test in headless mode - takeaway.properties headless=yes
 ## Parallel execution tests
-- For running the parallel cross browser tests launch project in your IDE and right click on the parallel.xml file and run with testng
+- For running the parallel cross browser tests launch project in your IDE and right click on the testng.xml file and run with testng
 ## Test Reports
 - First / Latest report will be located under ./target/cucumber-reports
 - Existing test reports will be moved to ./reports directory when a new one is generated
