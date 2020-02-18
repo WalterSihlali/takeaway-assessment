@@ -89,7 +89,7 @@ public class Hooks extends BaseUtilities {
                         firefoxDriverPath = windowsDriverLocation + getConfigPropertyValue(propertyFile, "windows_driver_firefox");
                         ;
                     } else if (this.getOsName().equalsIgnoreCase("Mac OS")) {
-                        firefoxDriverPath = macDriverLocation + getConfigPropertyValue(propertyFile, "windows_driver_firefox");
+                        firefoxDriverPath = macDriverLocation + getConfigPropertyValue(propertyFile, "mac_driver_firefox");
                     } else if (this.getOsName().equalsIgnoreCase("Linux")) {
                         firefoxDriverPath = linuxDriverLocation + getConfigPropertyValue(propertyFile, "linux_driver_firefox");
                     }
