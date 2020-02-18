@@ -17,7 +17,7 @@ import java.util.logging.Logger;
         features = {"src/test/features"},
         tags = {"@regression"},
         format = {"pretty"},
-        plugin = {"com.cucumber.listener.ExtentCucumberFormatter:target/cucumber-reports/takeway-report.html"}
+        plugin = {"com.cucumber.listener.ExtentCucumberFormatter:target/cucumber-reports/takeaway-report.html"}
         , monochrome = true)
 
 
@@ -61,7 +61,7 @@ public class TestRunner {
      */
     public static void copyLatestExtentReport() throws IOException {
         String timestamp = new SimpleDateFormat("yyyy:MM:dd_HH:mm:ss").format(Calendar.getInstance().getTime()).replaceAll(":", "-");
-        File source = new File(System.getProperty("user.dir") + "/target/cucumber-reports/takeway-report.html");
+        File source = new File(System.getProperty("user.dir") + "/target/cucumber-reports/takeaway-report.html");
         File file = new File(System.getProperty("user.dir") + "/reports");
         if(!file.exists()) {
             try {
@@ -70,7 +70,7 @@ public class TestRunner {
                 logger.info( ex.getLocalizedMessage());
             }
         }
-        File destination = new File(System.getProperty("user.dir") + "/reports/takeway-report" + timestamp + ".html");
+        File destination = new File(System.getProperty("user.dir") + "/reports/takeaway-report" + timestamp + ".html");
         copyFileUsingStream(source, destination);
     }
 

@@ -115,6 +115,10 @@ public class Hooks extends BaseUtilities {
                     logger.info("Unable to instantiate firefox driver", ex);
                 }
                 break;
+
+            default:
+                    logger.info("Invalid driver selected");
+
         }
     }
 

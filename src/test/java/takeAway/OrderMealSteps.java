@@ -64,6 +64,7 @@ public class OrderMealSteps extends BaseUtilities {
     @When("^user search for restaurant \"([^\"]*)\"$")
     public void user_enter_search_for_restaurant(String restaurant) {
         try {
+            secondsDelay(2);
             waitForElement(By.id(PageObjects.SEARCH_RESTAURANT));
             WebElement addressField = driver.findElement(By.id(PageObjects.SEARCH_RESTAURANT));
             highLighterMethod(driver, addressField);
@@ -191,6 +192,7 @@ public class OrderMealSteps extends BaseUtilities {
     @When("^user select restaurant listed under address$")
     public void user_select_restaurants_from_address_list() {
         try {
+            secondsDelay(2);
             waitForElement(By.id(PageObjects.RESTAURANT_FROM_LIST));
             driver.findElement(By.id(PageObjects.RESTAURANT_FROM_LIST)).click();
         } catch (NoSuchElementException ex) {
@@ -201,7 +203,8 @@ public class OrderMealSteps extends BaseUtilities {
     @Then("^user is on restaurant \"([^\"]*)\" details page$")
     public void user_is_on_restaurant_details_page(String restaurantName) {
         try {
-            secondsDelay(1);
+            secondsDelay(2);
+            waitForElement(By.className(PageObjects.RESTAURANT_NAME));
             String name = driver.findElement(By.className(PageObjects.RESTAURANT_NAME)).getText();
             Assert.assertEquals(name, restaurantName.trim());
         } catch (NoSuchElementException ex) {
